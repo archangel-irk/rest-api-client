@@ -1,7 +1,7 @@
 REST api client
 ---
 
-Basic Usage
+Примеры
 ---
 ```javascript
 var github = api('https://api.github.com', {
@@ -16,6 +16,22 @@ github.user.read();                                                // GET /user
 github.users('archangel-irk').repos.read();                        // GET /users/archangel-irk/repos
 github.users('archangel-irk').repos({ sort: 'pushed' }).read();    // GET /users/archangel-irk/repos?sort=pushed
 ```
+
+Архитектура библиотеки
+---
+```api()``` - функция-объект для создания инстанса api  
+```api.instance``` - объект инстанса api  
+```api.extend()``` - расширить api  
+```api.instance.extend()``` - расширить инстанс api  
+
+```api._request( method, url, data, headers )``` - отправить ajax запрос  
+```api._request( settings )``` - отправить ajax запрос  
+
+
+
+api.instance.add
+Resource
+
 
 API
 ---
