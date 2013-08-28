@@ -30,16 +30,20 @@ var resourceMixin = {
       : this.url;
   },
 
-  _request: function( method ){
+  _request: function( method, headers ){
     console.log( this.resourceName + '::_request' );
-    return this.instance._request( method, this.constructUrl(), this.data );
+    return this.instance._request( method, this.constructUrl(), this.data, headers );
   }
 };
 
 $.each('create read update delete patch'.split(' '), function( i, verb ){
-  resourceMixin[ verb ] = function( doneCallback ){
+  resourceMixin[ verb ] = function( headers, doneCallback ){
     console.log( this.resourceName + '::' + verb );
-    return this._request( verb ).done( doneCallback );
+    if ( $.isFunction( headers ) && typeof doneCallback === 'undefined' ){
+      doneCallback = headers;
+    }
+
+    return this._request( verb, headers ).done( doneCallback );
   };
 });
 
@@ -122,9 +126,13 @@ api.instance = api.prototype = {
     return api._request( method, url, data, headers );
   },
 
-  read: function(){
+  read: function( headers, doneCallback ){
     console.log( 'instance::read' );
-    return this._request('read', this.url );
+    if ( $.isFunction( headers ) && typeof doneCallback === 'undefined' ){
+      doneCallback = headers;
+    }
+
+    return this._request('read', this.url, undefined, headers ).done( doneCallback );
   }
 };
 
@@ -156,6 +164,11 @@ api.extend({
       settings = method;
     }
 
+    // Используется для алиасов, в которых второй параметр - есть объект настроек
+    if ( $.isPlainObject( url ) ){
+      settings = url;
+    }
+
     return $.ajax( settings ).fail(function( jqXHR, textStatus, errorThrown ){
       console.warn( jqXHR, textStatus, errorThrown );
     });
@@ -163,9 +176,13 @@ api.extend({
 });
 
 $.each('create read update delete patch'.split(' '), function( i, verb ){
-  api[ verb ] = function( doneCallback ){
+  api[ verb ] = function( settings, doneCallback ){
     console.log( this.resourceName + '::' + verb );
-    return this._request( verb ).done( doneCallback );
+    if ( $.isFunction( settings ) && typeof doneCallback === 'undefined' ){
+      doneCallback = settings;
+    }
+
+    return this._request( verb, settings ).done( doneCallback );
   };
 });
 
@@ -176,7 +193,7 @@ window.api = api;
 
 
 window.github = api('https://api.github.com', {
-  token: '8fbfc540f1ed1417083c70a990b4db3c9aa86efe'
+  token: '7d3268a2396ee7f4a601a37054ca8778dd45e8d5'
 });
 
 github.add('search', {
