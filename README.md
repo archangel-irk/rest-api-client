@@ -12,8 +12,9 @@ github.add('user');          // /user
 github.add('users');         // /users
 github.users.add('repos');   // /users/repos
 
-github.user.read();                           // GET /users
-github.users('jpillora').repos.read()         // GET /users/jpillora/repos
+github.user.read();                                                // GET /user
+github.users('archangel-irk').repos.read();                        // GET /users/archangel-irk/repos
+github.users('archangel-irk').repos({ sort: 'pushed' }).read();    // GET /users/archangel-irk/repos?sort=pushed
 ```
 
 API
