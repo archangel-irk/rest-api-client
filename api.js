@@ -124,7 +124,7 @@ api.instance = api.prototype = {
 
   read: function(){
     console.log( 'instance::read' );
-    return this._request('read', this.url);
+    return this._request('read', this.url );
   }
 };
 
@@ -144,16 +144,20 @@ api.extend({
 
   _request: function( method, url, data, headers ){
     console.log( 'api::_request' );
-    var type = this.methodMap[ method ];
+    var type = this.methodMap[ method ],
+      settings = {
+        type: type,
+        url: url,
+        data: data,
+        headers: headers
+      };
 
-    //TODO: нужен обработчик ошибок
-    //TODO: дать больше настроек
-    //TODO: возможность добавлять свои заголовки (при инициализации апи или вызове метода)
-    return $.ajax({
-      type: type,
-      url: url,
-      data: data,
-      headers: headers
+    if ( $.isPlainObject( method ) ){
+      settings = method;
+    }
+
+    return $.ajax( settings ).fail(function( jqXHR, textStatus, errorThrown ){
+      console.warn( jqXHR, textStatus, errorThrown );
     });
   }
 });
