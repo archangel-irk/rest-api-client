@@ -19,18 +19,22 @@ github.users('archangel-irk').repos({ sort: 'pushed' }).read();    // GET /users
 
 Архитектура библиотеки
 ---
-```api()``` - функция-объект для создания инстанса api  
-```api.instance``` - объект инстанса api  
+```api()``` - функция-конструктор для апи, а так же объект с методами
 ```api.extend()``` - расширить api  
+
+Все запросы возвращают jsXHR  
+```api._request( method, url, data, headers )``` - отправить кастомный ajax запрос  
+```api._request( settings )``` - отправить кастомный ajax запрос, передав любые настройки  
+
+Для удобства есть методы ```create read update delete patch```  
+```api.create( doneCallback )``` - отправить кастомный post запрос  
+
+Во всех примерах github - это инстанс
+```api.instance``` - объект инстанса api  
 ```api.instance.extend()``` - расширить инстанс api  
 
-```api._request( method, url, data, headers )``` - отправить ajax запрос  
-```api._request( settings )``` - отправить ajax запрос  
-
-
-
-api.instance.add
-Resource
+```api.instance.add```
+```Resource```
 
 
 API
