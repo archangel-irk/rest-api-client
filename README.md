@@ -42,7 +42,7 @@ Api
 `api.instance.add( resourceName, base, mixin )` - добавить ресурс к апи клиенту.  
 `api.instance.extend( object )` - расширить прототип апи клиента.  
 У апи клиента для отправки запросов есть методы `_request( method, url, data, headers )` и
-`read( headers, doneCallback )` т.к. другие методы (post, delete и т.д.) просто не нужны для корня апи.  
+`.read( headers, doneCallback )` т.к. другие методы (post, delete и т.д.) просто не нужны для корня апи.  
 
 И немного о самих ресурсах.  
 Resource - это функция со свойствами и методами, позволяющая делать запросы к ресурсам апи.  
