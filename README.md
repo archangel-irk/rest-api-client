@@ -1,12 +1,14 @@
 REST api client
 ---
 
-Примеры
+Пример
 ---
 ```javascript
 var github = api('https://api.github.com', {
   token: '8fbfc540f1ed1417083c70a990b4db3c9aa86efe'
 });
+
+github.read();               // GET https://api.github.com
 
 github.add('user');          // /user
 github.add('users');         // /users
@@ -28,18 +30,17 @@ github.users('archangel-irk').repos({ sort: 'pushed' }).read();    // GET /users
 Для удобства есть алиасы ```create read update delete patch```  
 ```api.create( settings )``` - отправить кастомный post запрос.  
 
-Во всех примерах github - это апи клиент.  
-```api.instance``` - прототип апи клиента.  
-
-Так же этот объект можно дополнить своими методами или свойствами.  
-```api.extend( object )``` - расширить api.  
+Так же этот объект можно дополнить своими методами или свойствами используя ```api.extend( object )```.  
 
 Тепепь поговорим о апи клиенте, который возвращает функция-конструктор ```api()```.  
+```api.instance``` - прототип апи клиента.  
+```api.instance.add``` - добавить ресурс к апи клиенту.  
 ```api.instance.extend( object )``` - расширить прототип апи клиента.  
+У апи клиента для отправки запросов есть методы```_request( method, url, data, headers )``` и
+```read()``` т.к. другие методы (post, delete и т.д.) просто не нужны для корня апи.  
 
-```api.instance.add``` - добавить ресурс к апи
 
-```Resource```
+```Resource```  
 
 
 API
