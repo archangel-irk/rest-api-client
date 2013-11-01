@@ -211,13 +211,12 @@ github.add('user');
 github.add('users');
 github.users.add('repos');
 
-//github.user.repos.read();
+//github.users.repos.read();
 
-// /places/filter?sort=rating-desc&orgtype[]=place&map=1
-/*cf.api.places.filter.get({
-  sort: 'rating-desc',
-  orgtype: ['place'],
-  map: 1
-});*/
+
+window.cf = api('http://localhost:1337');
+
+cf.add('places');
+cf.add('users');
 
 }();
