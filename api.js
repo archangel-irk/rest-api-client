@@ -94,13 +94,12 @@ var Resource = function( resourceName, base, mixin ){
  * @param url
  * @param options
  */
-var
-  api = function( url, options ){
-    return new api.instance.init( url, options );
-  };
+var Api = function( url, options ){
+  return new Api.instance.init( url, options );
+};
 
-api.instance = api.prototype = {
-  constructor: api,
+Api.instance = Api.prototype = {
+  constructor: Api,
 
   init: function( url, options ){
     if ( typeof url === 'string' ){
@@ -123,7 +122,7 @@ api.instance = api.prototype = {
     }
 
     console.log( 'instance::_request' );
-    return api._request( method, url, data, headers );
+    return Api._request( method, url, data, headers );
   },
 
   read: function( headers, doneCallback ){
@@ -136,12 +135,12 @@ api.instance = api.prototype = {
   }
 };
 
-api.instance.init.prototype = api.instance;
+Api.instance.init.prototype = Api.instance;
 
 // Добавим полезную функцию extend
-api.extend = api.instance.extend = $.extend;
+Api.extend = Api.instance.extend = $.extend;
 
-api.extend({
+Api.extend({
   methodMap: {
     'create': 'POST',
     'read':   'GET',
@@ -176,7 +175,7 @@ api.extend({
 });
 
 $.each('create read update delete patch'.split(' '), function( i, verb ){
-  api[ verb ] = function( settings, doneCallback ){
+  Api[ verb ] = function( settings, doneCallback ){
     console.log( this.resourceName + '::' + verb );
     if ( $.isFunction( settings ) && typeof doneCallback === 'undefined' ){
       doneCallback = settings;
@@ -186,7 +185,7 @@ $.each('create read update delete patch'.split(' '), function( i, verb ){
   };
 });
 
-window.api = api;
+window.Api = Api;
 
 
 // Example
