@@ -26,6 +26,23 @@ github.users('archangel-irk').repos.read();                        // GET /users
 github.users('archangel-irk').repos({ sort: 'pushed' }).read();    // GET /users/archangel-irk/repos?sort=pushed
 ```
 
+Вызов родительских функций
+---
+```javascript
+github.add('search', {
+  searchMethod: function(){
+    console.log( 'search::searchMethod' );
+  }
+});
+github.search.add('users', {
+  usersMethod: function(){
+    this.parent.searchMethod();
+  }
+});
+
+github.search.users.usersMethod(); // search::asd
+```
+
 Api
 ---
 Сначала опишем самый верхний уровень.  
