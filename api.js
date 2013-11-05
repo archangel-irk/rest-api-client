@@ -189,34 +189,25 @@ $.each('create read update delete patch'.split(' '), function( i, verb ){
 window.api = api;
 
 
-
-
-
-window.github = api('https://api.github.com', {
+// Example
+/*window.github = api('https://api.github.com', {
   token: '7d3268a2396ee7f4a601a37054ca8778dd45e8d5'
 });
 
 github.add('search', {
-  asd: function(){
-    console.log( 'user::asd' );
+  searchMethod: function(){
+    console.log( 'search::searchMethod' );
   }
 });
 github.search.add('users', {
-  asd: function(){
-    this.parent.asd();
+  usersMethod: function(){
+    this.parent.searchMethod();
   }
 });
 
 github.add('user');
 github.add('users');
-github.users.add('repos');
+github.users.add('repos');*/
 
 //github.users.repos.read();
-
-
-window.cf = api('http://localhost:1337');
-
-cf.add('places');
-cf.add('users');
-
 }();
