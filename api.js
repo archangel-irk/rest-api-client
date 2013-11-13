@@ -155,22 +155,8 @@ Api.instance = Api.prototype = {
       settings = url;
     }
 
-    if ( notifications ){
-      settings.beforeSend = function(){
-        notifications.load.show();
-      };
-    }
-
     return $.ajax( settings ).fail(function( jqXHR, textStatus, errorThrown ){
       console.warn( jqXHR, textStatus, errorThrown );
-
-      if ( notifications ){
-        notifications.load.fail();
-      }
-    }).done(function(){
-        if ( notifications ){
-          notifications.load.hide();
-        }
     });
   },
 
