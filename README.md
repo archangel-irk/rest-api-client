@@ -40,7 +40,7 @@ github.search.add('users', {
   }
 });
 
-github.search.users.usersMethod(); // search::asd
+github.search.users.usersMethod(); // search::searchMethod
 ```
 
 Api
