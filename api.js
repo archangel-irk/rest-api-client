@@ -1,17 +1,12 @@
 /**
  * API Client
- *
- * User: Constantine Melnikov
- * Email: ka.melnikov@gmail.com
- * Date: 21.08.13
- * Time: 21:50
  */
 !function(){
 'use strict';
 
 var resourceMixin = {
   resourceName: 'resource',
-  url: '',
+  url: '', // = resourceName
 
   // Добавить новый ресурс
   add: function( resourceName, base, mixin ){
@@ -25,9 +20,18 @@ var resourceMixin = {
 
   // Пробежаться по всем родителям и собрать url (без query string)
   constructUrl: function constructUrl(){
-    return this.parent
-      ? constructUrl.call( this.parent ) + '/' + this.url + ( this.identity ? '/' +  this.identity : '' )
+    var identity = this.identity ? '/' + this.identity : '';
+
+    // Пробежаться по всем ресурсам и заглянуть в корень апи, чтобы собрать url
+    var url = this.parent
+      ? constructUrl.call( this.parent ) + '/' + this.url + identity
       : this.url;
+
+    // Этот параметр сохраняется для возможности собирать url,
+    // по этому его надо очистить для дальшейших запросов.
+    this.identity = '';
+
+    return url;
   },
 
   _request: function( method, headers ){
@@ -50,10 +54,12 @@ $.each('create read update delete patch'.split(' '), function( i, verb ){
 // Как бы конструктор ресурса, но возвращает функцию-объект с примесями
 var Resource = function( resourceName, base, mixin ){
   var
+  //TODO: сделать два параметра identity и data
     resource = function resource( data ){
-      // Если объъект - значит это куча параметров
+      // Если объект - значит это куча параметров
       if ( $.isPlainObject( data ) ){
         resource.data = data;
+        resource.identity = '';
 
       // А иначе это identity ресурса
       } else {
@@ -64,8 +70,8 @@ var Resource = function( resourceName, base, mixin ){
     };
 
   $.extend( resource, resourceMixin, {
-    url: resourceName,
-    resourceName: resourceName
+    resourceName: resourceName,
+    url: resourceName
   }, mixin );
 
   resource.parent = base;
@@ -113,7 +119,16 @@ Api.instance = Api.prototype = {
   // Добавить новый ресурс
   add: resourceMixin.add,
 
+  methodMap: {
+    'create': 'POST',
+    'read':   'GET',
+    'update': 'PUT',
+    'delete': 'DELETE',
+    'patch':  'PATCH'
+  },
+
   _request: function( method, url, data, headers ){
+    console.log( 'api::_request' );
     headers = headers || {};
 
     if ( this.token && typeof headers.token === 'undefined' ){
@@ -121,8 +136,42 @@ Api.instance = Api.prototype = {
       //Accept: 'application/vnd.github.preview'
     }
 
-    console.log( 'instance::_request' );
-    return Api._request( method, url, data, headers );
+    var api = this,
+      type = this.methodMap[ method ],
+      settings = {
+        //cache: false,
+        type: type,
+        url: url,
+        data: data,
+        headers: headers
+      };
+
+    if ( $.isPlainObject( method ) ){
+      settings = method;
+    }
+
+    // Используется для алиасов, в которых второй параметр - есть объект настроек
+    if ( $.isPlainObject( url ) ){
+      settings = url;
+    }
+
+    if ( notifications ){
+      settings.beforeSend = function(){
+        notifications.load.show();
+      };
+    }
+
+    return $.ajax( settings ).fail(function( jqXHR, textStatus, errorThrown ){
+      console.warn( jqXHR, textStatus, errorThrown );
+
+      if ( notifications ){
+        notifications.load.fail();
+      }
+    }).done(function(){
+        if ( notifications ){
+          notifications.load.hide();
+        }
+    });
   },
 
   read: function( headers, doneCallback ){
@@ -140,53 +189,7 @@ Api.instance.init.prototype = Api.instance;
 // Добавим полезную функцию extend
 Api.extend = Api.instance.extend = $.extend;
 
-Api.extend({
-  methodMap: {
-    'create': 'POST',
-    'read':   'GET',
-    'update': 'PUT',
-    'delete': 'DELETE',
-    'patch':  'PATCH'
-  },
-
-  _request: function( method, url, data, headers ){
-    console.log( 'api::_request' );
-    var type = this.methodMap[ method ],
-      settings = {
-        type: type,
-        url: url,
-        data: data,
-        headers: headers
-      };
-
-    if ( $.isPlainObject( method ) ){
-      settings = method;
-    }
-
-    // Используется для алиасов, в которых второй параметр - есть объект настроек
-    if ( $.isPlainObject( url ) ){
-      settings = url;
-    }
-
-    return $.ajax( settings ).fail(function( jqXHR, textStatus, errorThrown ){
-      console.warn( jqXHR, textStatus, errorThrown );
-    });
-  }
-});
-
-$.each('create read update delete patch'.split(' '), function( i, verb ){
-  Api[ verb ] = function( settings, doneCallback ){
-    console.log( this.resourceName + '::' + verb );
-    if ( $.isFunction( settings ) && typeof doneCallback === 'undefined' ){
-      doneCallback = settings;
-    }
-
-    return this._request( verb, settings ).done( doneCallback );
-  };
-});
-
 window.Api = Api;
-
 
 // Example
 /*window.github = api('https://api.github.com', {
