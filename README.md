@@ -1,18 +1,19 @@
-REST api client
+RESTfull api client
 ---
-Постройте удобный RESTfull клиент к серверному api.
+Постройте удобный клиент к серверному api.
 Библиотека использует подход "цепочки вызывов" для организации прозрачного запроса.
 Авторизация доступна по токену.
 
 Dependencies
 ---
-1. jQuery
+1. jQuery ajax
 
 Basic usage
 ---
 ```javascript
 var github = api('https://api.github.com', {
-  token: '8fbfc540f1ed1417083c70a990b4db3c9aa86efe'
+  token: '8fbfc540f1ed1417083c70a990b4db3c9aa86efe',
+  unauthorizedCallback: function(){} // Вызывается всякий раз, когда код ответа от сервера 401
 });
 
 github.read();               // GET https://api.github.com
