@@ -23,47 +23,47 @@ var resourceMixin = {
     var identity = this.identity ? '/' + this.identity : '';
 
     // Пробежаться по всем ресурсам и заглянуть в корень апи, чтобы собрать url
-    var url = this.parent
+    return this.parent
       ? constructUrl.call( this.parent ) + '/' + this.url + identity
       : this.url;
-
-    // Этот параметр сохраняется для возможности собирать url,
-    // по этому его надо очистить для дальшейших запросов.
-    this.identity = '';
-
-    return url;
   },
 
   _request: function( method, headers ){
-    console.log( this.resourceName + '::_request' );
-    return this.instance._request( method, this.constructUrl(), this.data, headers );
+    var url = this.constructUrl();
+
+    console.log( this.resourceName + '::' + method + ' _request to ' + url );
+    return this.instance._request( method, url, this.params, headers );
   }
 };
 
-$.each('create read update delete patch'.split(' '), function( i, verb ){
+$.each('create read update delete patch get post'.split(' '), function( i, verb ){
   resourceMixin[ verb ] = function( headers, doneCallback ){
-    console.log( this.resourceName + '::' + verb );
+    // Если headers - есть функция, то это doneCallback
     if ( $.isFunction( headers ) && typeof doneCallback === 'undefined' ){
       doneCallback = headers;
     }
 
-    return this._request( verb, headers ).done( doneCallback );
+    var request = this._request( verb, headers ).done( doneCallback );
+
+    // Этот параметр сохраняется для возможности собирать url,
+    // по этому его надо очистить для дальшейших запросов.
+    this.identity = '';
+    return request;
   };
 });
 
 // Как бы конструктор ресурса, но возвращает функцию-объект с примесями
 var Resource = function( resourceName, base, mixin ){
   var
-  //TODO: сделать два параметра identity и data
-    resource = function resource( data ){
+    resource = function resource( identity, params ){
       // Если объект - значит это куча параметров
-      if ( $.isPlainObject( data ) ){
-        resource.data = data;
+      if ( $.isPlainObject( identity ) ){
         resource.identity = '';
-
+        resource.params = identity;
       // А иначе это identity ресурса
       } else {
-        resource.identity = data;
+        resource.identity = identity;
+        resource.params = params;
       }
 
       return resource;
@@ -116,47 +116,62 @@ Api.instance = Api.prototype = {
     $.extend( this, $.isPlainObject( url ) ? url : options );
   },
 
-  // Добавить новый ресурс
+  /**
+   * Добавить новый ресурс
+   * @see resourceMixin.add
+   */
   add: resourceMixin.add,
 
-  methodMap: {
+  // Объект для добавления произвольных заголовков ко всем запросам
+  // удобно для авторизации по токенам
+  headers: {},
+
+  methodsMap: {
     'create': 'POST',
     'read':   'GET',
     'update': 'PUT',
     'delete': 'DELETE',
-    'patch':  'PATCH'
+    'patch':  'PATCH',
+
+    'post':   'POST',
+    'get':    'GET'
   },
 
-  _request: function( method, url, data, headers ){
-    console.log( 'api::_request' );
-    headers = headers || {};
+  _request: function( method, url, params, headers ){
+    headers = $.extend( true, {}, this.headers, headers );
 
     if ( this.token && typeof headers.token === 'undefined' ){
       headers.Authorization = 'token ' + this.token;
       //Accept: 'application/vnd.github.preview'
     }
 
-    var api = this,
-      type = this.methodMap[ method ],
-      settings = {
+    var instance = this,
+      type = this.methodsMap[ method ],
+      ajaxSettings = {
         //cache: false,
         type: type,
         url: url,
-        data: data,
-        headers: headers
+        data: JSON.stringify(params),
+        headers: headers,
+        contentType: 'application/json'
       };
 
     if ( $.isPlainObject( method ) ){
-      settings = method;
+      ajaxSettings = method;
     }
 
     // Используется для алиасов, в которых второй параметр - есть объект настроек
     if ( $.isPlainObject( url ) ){
-      settings = url;
+      ajaxSettings = url;
     }
 
-    return $.ajax( settings ).fail(function( jqXHR, textStatus, errorThrown ){
+    return $.ajax( ajaxSettings ).fail(function( jqXHR, textStatus, errorThrown ){
       console.warn( jqXHR, textStatus, errorThrown );
+
+      // Unauthorized
+      if ( jqXHR.status === 401 && instance.unauthorizedCallback ){
+        instance.unauthorizedCallback( jqXHR );
+      }
     });
   },
 
