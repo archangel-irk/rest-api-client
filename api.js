@@ -498,8 +498,8 @@ ApiClient.instance = ApiClient.prototype = {
     }
 
     var self = this
-      , type = this.methodsMap[ method ]
-      , notificationType = type === 'GET' ? 'load' : ( type === 'POST' || type === 'PUT' || type === 'PATCH' ) ? 'save' : 'delete'
+      //, type = this.methodsMap[ method ]
+      //, notificationType = type === 'GET' ? 'load' : ( type === 'POST' || type === 'PUT' || type === 'PATCH' ) ? 'save' : 'delete'
       , _ajaxSettings = this._prepareAjaxSettings( method, url, data, ajaxSettings );
 
     // Использовать значение по умолчанию, если useNotifications не задан
@@ -555,6 +555,8 @@ ApiClient.instance.init.prototype = ApiClient.instance;
 
 // Добавим extend для возможности расширения
 ApiClient.extend = ApiClient.instance.extend = $.extend;
-//cf.ApiClient = ApiClient;
+
+// exports
+window.ApiClient = ApiClient;
 
 })();
