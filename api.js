@@ -504,15 +504,15 @@
 
       // Использовать значение по умолчанию, если useNotifications не задан
       // тут же порверяем, подключены ли уведомления
-      if ( _.isBoolean( useNotifications ) ){
+      /*if ( _.isBoolean( useNotifications ) ){
         useNotifications = useNotifications && cf.notification;
       } else {
         useNotifications = this.notifications && cf.notification;
-      }
+      }*/
 
-      if ( useNotifications ){
+      /*if ( useNotifications ){
         cf.notification[ notificationType ].show();
-      }
+      }*/
 
       return $.ajax( _ajaxSettings ).fail(function( jqXHR, textStatus, errorThrown ){
         console.warn( jqXHR, textStatus, errorThrown );
@@ -522,21 +522,21 @@
           self.unauthorizedCallback( jqXHR, method, url, data, ajaxSettings, doneCallback );
 
           // Не показывать сообщение с ошибкой при 401, если всё плохо, то роутер сам перекинет на форму входа
-          if ( useNotifications ){
+          /*if ( useNotifications ){
             cf.notification[ notificationType ].hide();
-          }
+          }*/
 
           return;
         }
 
-        if ( useNotifications ){
+        /*if ( useNotifications ){
           cf.notification[ notificationType ].fail();
-        }
+        }*/
 
       }).done(function(){
-        if ( useNotifications ){
+        /*if ( useNotifications ){
           cf.notification[ notificationType ].hide();
-        }
+        }*/
       }).done( doneCallback );
     },
 
@@ -555,5 +555,5 @@
 
 // Добавим extend для возможности расширения
   ApiClient.extend = ApiClient.instance.extend = $.extend;
-  cf.ApiClient = ApiClient;
+  //cf.ApiClient = ApiClient;
 }();
