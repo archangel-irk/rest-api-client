@@ -6,7 +6,8 @@ RESTfull api client
 
 Dependencies
 ---
-1. jQuery ajax
+1. lodash
+2. jQuery ajax
 
 Basic usage
 ---
@@ -81,3 +82,4 @@ Resource - это функция со свойствами и методами, 
 Todo
 ===
 Кэширование и работа со [storage](https://github.com/archangel-irk/storage)
+Добавить плагин notifications из cf.js
