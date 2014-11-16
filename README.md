@@ -13,7 +13,12 @@ Basic usage
 ---
 ```javascript
 var github = ApiClient('https://api.github.com', {
-  token: '8fbfc540f1ed1417083c70a990b4db3c9aa86efe',
+  hooks: {
+    headers: {
+      Accept: 'application/vnd.github.v3+json',
+      Authorization: 'token 8fbfc540f1ed1417083c70a990b4db3c9aa86efe'
+    }
+  },
   unauthorizedCallback: function(){} // Вызывается всякий раз, когда код ответа от сервера 401
 });
 
@@ -25,7 +30,7 @@ github.users.add('repos');   // /users/repos
 
 github.user.read();                                                // GET /user
 github.users('archangel-irk').repos.read();                        // GET /users/archangel-irk/repos
-github.users('archangel-irk').repos({ sort: 'pushed' }).read();    // GET /users/archangel-irk/repos?sort=pushed
+github.users('archangel-irk').repos.read({ sort: 'pushed' });      // GET /users/archangel-irk/repos?sort=pushed
 ```
 
 Вызов родительских функций

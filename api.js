@@ -4,7 +4,12 @@
 // Example
 /*
  var github = ApiClient('https://api.github.com', {
-  token: '7d3268a2396ee7f4a601a37054ca8778dd45e8d5'
+   hooks: {
+     headers: {
+       Accept: 'application/vnd.github.v3+json',
+       Authorization: 'token 8fbfc540f1ed1417083c70a990b4db3c9aa86efe'
+     }
+   }
  });
 
  github.add('search', {
@@ -168,8 +173,10 @@ var resourceMixin = {
 
   // Пробежаться по всем родителям и собрать url (без query string)
   constructUrl: function constructUrl( recursionCall ){
+    // todo: проверить надобность закомментированного кода
     // условие с recursionCall добавляет слэш в урл перед знаком вопроса
-    var identity = this.identity ? '/' + this.identity : recursionCall ? '' : '/';
+    //var identity = this.identity ? '/' + this.identity : recursionCall ? '' : '/';
+    var identity = this.identity ? '/' + this.identity : '';
 
     // Пробежаться по всем ресурсам и заглянуть в корень апи, чтобы собрать url
     return this.parentResource
@@ -379,17 +386,29 @@ var Resource = function( resourceName, parentResource, usersMixin ){
  *
  * @example
  * ApiClient('/api', {
-*   token: 'XXXXXX'
-* });
+ *   hooks: {
+ *     headers: {
+ *       token: 'XXXXXX'
+ *     }
+ *   }
+ * });
  *
  * ApiClient('https://domain.com/api', {
-*   token: 'XXXXXX'
-* });
+ *   hooks: {
+ *     headers: {
+ *       token: 'XXXXXX'
+ *     }
+ *   }
+ * });
  *
  * ApiClient({
-*   url: '/api'
-*   token: 'XXXXXX'
-* });
+ *   url: '/api'
+ *   hooks: {
+ *     headers: {
+ *       token: 'XXXXXX'
+ *     }
+ *   }
+ * });
  *
  * @param url
  * @param options
@@ -526,7 +545,7 @@ ApiClient.instance = ApiClient.prototype = {
           cf.notification[ notificationType ].hide();
         }*/
 
-        return;
+        //return;
       }
 
       /*if ( useNotifications ){
