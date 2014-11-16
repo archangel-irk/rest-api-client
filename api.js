@@ -447,7 +447,7 @@ ApiClient.instance = ApiClient.prototype = {
         url: url
       });
 
-    if ( this.token && ajaxSettings.headers.token == null ){
+    if ( this.token && ajaxSettings.headers && ajaxSettings.headers.token == null ){
       _ajaxSettings.headers.Authorization = 'token ' + this.token;
       //Accept: 'application/vnd.github.preview'
     }
@@ -546,6 +546,8 @@ ApiClient.instance = ApiClient.prototype = {
       doneCallback = ajaxSettings;
       ajaxSettings = undefined;
     }
+
+    ajaxSettings = ajaxSettings || {};
 
     return this._request('read', this.url, undefined, ajaxSettings, false, doneCallback );
   }
