@@ -56,7 +56,6 @@
 
  */
 
-(function(){
 'use strict';
 
 var resourceMixin = {
@@ -243,13 +242,13 @@ _.forEach( Object.keys( methodsMap ), function( verb ){
         documentIdString = data._id.toString();
         data = data.$__delta();
 
-        // При сохранении через метод save() у документа
-      } else if ( data._id && storage.ObjectId.isValid( data._id ) ) {
-        documentIdString = data._id.toString();
-
         // Так можно понять, что мы сохраняем сущетвующий на сервере Document
       } else if ( storage.ObjectId.isValid( identity ) ) {
         documentIdString = identity;
+
+        // При сохранении через метод save() у документа
+      } else if ( data._id && storage.ObjectId.isValid( data._id ) ) {
+        documentIdString = data._id.toString();
       }
     }
 
@@ -517,21 +516,21 @@ ApiClient.instance = ApiClient.prototype = {
     }
 
     var self = this
-      //, type = this.methodsMap[ method ]
-      //, notificationType = type === 'GET' ? 'load' : ( type === 'POST' || type === 'PUT' || type === 'PATCH' ) ? 'save' : 'delete'
+      , type = this.methodsMap[ method ]
+      , notificationType = type === 'GET' ? 'load' : ( type === 'POST' || type === 'PUT' || type === 'PATCH' ) ? 'save' : 'delete'
       , _ajaxSettings = this._prepareAjaxSettings( method, url, data, ajaxSettings );
 
     // Использовать значение по умолчанию, если useNotifications не задан
     // тут же порверяем, подключены ли уведомления
-    /*if ( _.isBoolean( useNotifications ) ){
+    if ( _.isBoolean( useNotifications ) ){
       useNotifications = useNotifications && cf.notification;
     } else {
       useNotifications = this.notifications && cf.notification;
-    }*/
+    }
 
-    /*if ( useNotifications ){
+    if ( useNotifications ){
       cf.notification[ notificationType ].show();
-    }*/
+    }
 
     return $.ajax( _ajaxSettings ).fail(function( jqXHR, textStatus, errorThrown ){
       console.warn( jqXHR, textStatus, errorThrown );
@@ -541,21 +540,21 @@ ApiClient.instance = ApiClient.prototype = {
         self.unauthorizedCallback( jqXHR, method, url, data, ajaxSettings, doneCallback );
 
         // Не показывать сообщение с ошибкой при 401, если всё плохо, то роутер сам перекинет на форму входа
-        /*if ( useNotifications ){
+        if ( useNotifications ){
           cf.notification[ notificationType ].hide();
-        }*/
+        }
 
-        //return;
+        return;
       }
 
-      /*if ( useNotifications ){
+      if ( useNotifications ){
         cf.notification[ notificationType ].fail();
-      }*/
+      }
 
     }).done(function(){
-      /*if ( useNotifications ){
+      if ( useNotifications ){
         cf.notification[ notificationType ].hide();
-      }*/
+      }
     }).done( doneCallback );
   },
 
@@ -578,6 +577,4 @@ ApiClient.instance.init.prototype = ApiClient.instance;
 ApiClient.extend = ApiClient.instance.extend = $.extend;
 
 // exports
-window.ApiClient = ApiClient;
-
-})();
+module.exports = ApiClient;
