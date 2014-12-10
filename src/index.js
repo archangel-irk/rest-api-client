@@ -476,16 +476,16 @@ ApiClient.instance = ApiClient.prototype = {
 
     if ( type === 'GET' ){
       _.assign( _ajaxSettings.data, data );
-    } else if ( data ){
+    } else {
       // Если сохраняем документ, нужно сделать toObject({depopulate: 1})
-      if ( data.constructor && data.constructor.name && data.constructor.name === 'Document' ){
+      if ( data && data.constructor && data.constructor.name && data.constructor.name === 'Document' ){
         _.assign( _ajaxSettings.data, data.toObject({depopulate: 1}) );
 
-      } else {
+      } else if ( data ) {
         _.assign( _ajaxSettings.data, data );
       }
 
-      if ( _ajaxSettings.contentType === 'application/json' ){
+      if ( _ajaxSettings.data && _ajaxSettings.contentType === 'application/json' ){
         _ajaxSettings.data = JSON.stringify( _ajaxSettings.data );
       }
     }
