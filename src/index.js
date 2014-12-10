@@ -31,6 +31,8 @@
  // Прочитать репозитории (отправить гет запрос на https://api.github.com/users/repos/)
  github.users.repos.read();
 
+ //-----------------------------
+
  // Не совсем REST, все запросы идут на один адрес
  var simpleApi = ApiClient('api.example.com', {});
 
@@ -46,11 +48,12 @@
 
  simpleApi.read(doneCallback).done(callback).fail(callback);
 
- Работа с документами, он сам преобразуется через метод $__delta()
+ Работа с документами (storage), он сам преобразуется через метод $__delta()
  simpleApi.post( Document );
  simpleApi.save( Document );
 
 
+ // Фичи
  ajaxSettings для каждого запроса
  Identity для каждого запроса
 
@@ -170,7 +173,7 @@ var resourceMixin = {
     throw new TypeError('Invalid select() argument. Must be string or object.');
   },
 
-  // Пробежаться по всем родителям и собрать url (без query string)
+  // Пробежаться по всем родительским ресурсам и собрать url (без query string)
   constructUrl: function constructUrl( recursionCall ){
     // todo: проверить надобность закомментированного кода
     // условие с recursionCall добавляет слэш в урл перед знаком вопроса
@@ -409,8 +412,8 @@ var Resource = function( resourceName, parentResource, usersMixin ){
  *   }
  * });
  *
- * @param url
- * @param options
+ * @param url - ссылка на корень api
+ * @param options - опции для клиента
  */
 var ApiClient = function( url, options ){
   return new ApiClient.instance.init( url, options );
@@ -465,6 +468,7 @@ ApiClient.instance = ApiClient.prototype = {
         url: url
       });
 
+    // Добавляем авторизацию по токену
     if ( this.token && ajaxSettings.headers && ajaxSettings.headers.token == null ){
       _ajaxSettings.headers.Authorization = 'token ' + this.token;
       //Accept: 'application/vnd.github.preview'
@@ -489,7 +493,7 @@ ApiClient.instance = ApiClient.prototype = {
     // todo проверть надобность кода
     // Используется для алиасов, в которых второй параметр - есть объект настроек
     if ( $.isPlainObject( url ) ){
-      console.info('Ахуеть, нужный код!!!!');
+      console.info('Ах@*ть, нужный код!!!!');
       _ajaxSettings = url;
       debugger;
     }
@@ -558,6 +562,13 @@ ApiClient.instance = ApiClient.prototype = {
     }).done( doneCallback );
   },
 
+  /**
+   * Метод для чтения корня api
+   *
+   * @param ajaxSettings
+   * @param doneCallback
+   * @returns {$.Deferred}
+   */
   read: function( ajaxSettings, doneCallback ){
     console.log( 'api::read' );
     if ( $.isFunction( ajaxSettings ) ){
@@ -572,9 +583,6 @@ ApiClient.instance = ApiClient.prototype = {
 };
 
 ApiClient.instance.init.prototype = ApiClient.instance;
-
-// Добавим extend для возможности расширения
-ApiClient.extend = ApiClient.instance.extend = $.extend;
 
 // exports
 module.exports = ApiClient;
