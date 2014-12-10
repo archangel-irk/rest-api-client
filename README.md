@@ -86,5 +86,6 @@ Resource - это функция со свойствами и методами, 
 
 Todo
 ===
-Кэширование и работа со [storage](https://github.com/archangel-irk/storage)
-Добавить плагин notifications из cf.js
+Кэширование и работа со [storage](https://github.com/archangel-irk/storage)  
+Добавить плагин notifications из cf.js  
+Сделать тесты (можно смотреть на https://github.com/tj/supertest)  
