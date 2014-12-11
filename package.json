@@ -1,6 +1,6 @@
 {
   "name": "rest-api-client",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "RESTfull api client",
   "author": "Constantine Melnikov <ka.melnikov@gmail.com>",
   "maintainers": "Constantine Melnikov <ka.melnikov@gmail.com>",
