@@ -290,7 +290,7 @@ _.forEach( Object.keys( methodsMap ), function( verb ){
         fields = resource.transformFields( data.fields );
       }
 
-      // При использовании параметра doNotStore - не надо сохранять ответ в хранилище
+      // Есть ответ надо сохранить в хранилище
       if ( resource.storage && !ajaxSettings.doNotStore ){
         // При сохранении и обновлении нужно обновлять документ
         if ( method === 'POST' || method === 'PUT' ){
@@ -302,7 +302,7 @@ _.forEach( Object.keys( methodsMap ), function( verb ){
             result.set( response.result );
 
             // Создаём ссылку по новому id в коллекции
-            storage[ resource.collectionName ].documents[ documentIdString ] = result;
+            storage[ resource.collectionName ].updateIdLink( result );
 
             // Этот документ теперь сохранён на сервере, значит он уже не новый.
             result.isNew = false;
