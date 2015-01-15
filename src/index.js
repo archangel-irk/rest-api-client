@@ -274,7 +274,7 @@ _.forEach( Object.keys( methodsMap ), function( verb ){
         // Если данное есть - вернуть его
         if ( inCache.result ){
           doneCallback && doneCallback( inCache.result, inCache.meta );
-          this.identity = '';
+          clearIdentity( resource );
           return;
         }
       }
@@ -338,11 +338,19 @@ _.forEach( Object.keys( methodsMap ), function( verb ){
     //TODO: Использовать идеологю query? query объект для построения запросов
 
     // identity сохраняется для constructUrl, его нужно очистить для последующих запросов.
-    this.identity = '';
+    clearIdentity( resource );
 
     return dfd;
   };
 });
+
+// Очистить identity у ресурса и его родительских ресурсов тоже
+function clearIdentity( resource ){
+  while ( resource.parentResource ) {
+    resource.identity = '';
+    resource = resource.parentResource;
+  }
+}
 
 /**
  * Как бы конструктор ресурса, но возвращает функцию-объект с примесями
