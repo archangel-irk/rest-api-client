@@ -365,7 +365,7 @@ var Resource = function( resourceName, parentResource, usersMixin ){
 
   /**
    * Эту функцию мы отдаём пользователю в качестве доступа к ресурсу.
-   * Она позволяет задать identity и дополнительные параметры в запрос.
+   * Она позволяет задать identity для запроса.
    *
    * @param [identity]
    * @returns {Function}
