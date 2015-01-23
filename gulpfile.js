@@ -42,7 +42,7 @@ gulp.task('build', function() {
   server.stop();
 });*/
 
-gulp.task('server', function() {
+gulp.task('server', function( done ) {
   server.listen({
     path: 'tests/server/app.js'
   });
