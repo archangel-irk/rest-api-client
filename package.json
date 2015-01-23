@@ -14,7 +14,14 @@
     "gulp": "latest",
     "gulp-rename": "latest",
     "gulp-uglify": "latest",
-    "gulp-browserify": "latest"
+    "gulp-browserify": "latest",
+
+    "express": "latest",
+    "gulp-develop-server": "latest",
+    "karma": "latest",
+    "karma-mocha": "latest",
+    "karma-chai": "latest",
+    "karma-chrome-launcher": "latest"
   },
   "license": "MIT"
 }
