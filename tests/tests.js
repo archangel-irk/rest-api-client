@@ -59,11 +59,11 @@ describe('collection', function(){
 // Вот список вкладок, которые могут понадобиться
 // http://qunitjs.com/cookbook/#asynchronous-callbacks
 // https://github.com/cjohansen/Sinon.JS
-// http://sinonjs.org/docs/#fakeServer
-// http://sinonjs.org/qunit/
-// http://jsfiddle.net/jonkemp/ZGrTK/
-// http://tutorials.jumpstartlab.com/projects/javascript/testing/2-ajax-and-sinon.html
-// https://github.com/tj/supertest
-// https://github.com/ded/reqwest - тут есть тесты
-// https://github.com/pyrsmk/qwest - тут есть тесты
-// https://github.com/natevw/fermata
+// https://github.com/WP-API/client-js/blob/gh-pages/tests%2Ftests-post.js
+// http://www.wenda.io/questions/2580277/sinon-js-1-10-jquery-2-1-and-synchronous-request.html
+// http://stackoverflow.com/questions/24961056/sinon-js-1-10-jquery-2-1-and-synchronous-request
+// http://jsfiddle.net/kHFf5/
+// http://unitjs.com/guide/sinon-js.html
+// http://taylor.fausak.me/2013/02/17/testing-a-node-js-http-server-with-mocha/
+// https://github.com/narirou/gulp-develop-server
+// http://expressjs.com/starter/basic-routing.html
