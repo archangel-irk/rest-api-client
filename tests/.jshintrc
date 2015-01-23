@@ -20,10 +20,8 @@
   "wsh": true,
 
   "globals": {
-    "require": false,
-    "define": false,
-    "DOMParser": false,
-    "QUnit": false,
+    "describe": false,
+    "it": false,
     "ok": false,
     "equal": false,
     "asyncTest": false,
@@ -35,32 +33,8 @@
     "stop": false,
     "expect": false,
     "throws": false,
-    "ajaxTest": false,
-    "testIframe": false,
-    "testIframeWithCallback": false,
-    "iframeCallback": true,
-    "createDashboardXML": false,
-    "createXMLFragment": false,
-    "moduleTeardown": false,
-    "testFoo": false,
-    "url": false,
-    "t": false,
-    "q": false,
 
     "jQuery": true,
-    "sinon": true,
-    "module": true,
-    "test": true,
-    "amdDefined": true,
-    "fireNative": true,
-    "Globals": true,
-    "hasPHP": true,
-    "isLocal": true,
-    "supportjQuery": true,
-    "originaljQuery": true,
-    "$": true,
-    "original$": true,
-    "baseURL": true,
-    "externalHost": true
+    "$": true
   }
 }
