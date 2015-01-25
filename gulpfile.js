@@ -33,32 +33,19 @@ gulp.task('build', function() {
     .pipe( gulp.dest('dist') );
 });
 
-/*gulp.task('server', function () {
-  // Start the server at the beginning of the task
-  server.run({
-    file: 'tests/server/app.js'
-  });
-
-  server.stop();
-});*/
-
 gulp.task('server', function( done ) {
   server.listen({
-    path: 'tests/server/app.js'
+    path: 'test/server/server.js'
+  }, function( err ){
+    done();
   });
-
-  setTimeout(function(){
-    server.kill();
-  }, 10000 );
 });
 
 gulp.task('test', ['server'], function (done) {
   karma.start({
     configFile: __dirname + '/karma.conf.js'
   }, function(){
-
     server.kill();
-
     done();
   });
 });
