@@ -573,6 +573,7 @@ ApiClient.instance = ApiClient.prototype = {
 
   /**
    * Метод для чтения корня api
+   * todo: сделать алиас на метод .get()
    *
    * @param ajaxSettings
    * @param doneCallback
