@@ -47,9 +47,17 @@
   console.log("after server.respond()");
 });*/
 
-describe('collection', function(){
-  it('create', function(done){
-    done();
+var api = ApiClient('http://0.0.0.0:3000');
+
+describe('ApiClient', function(){
+  //this.timeout( 0 );
+
+  it('test', function( done ){
+    api.read().done(function( data ){
+      assert.equal( data.user, 'tobi' );
+
+      done();
+    });
   });
 });
 

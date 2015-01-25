@@ -7,7 +7,7 @@ module.exports = function (config) {
       'vendor/jquery-2.1.3.js',
       'vendor/lodash.js',
       'dist/api-client.min.js',
-      'tests/*.js'
+      'test/*.js'
     ],
 
     // frameworks to use

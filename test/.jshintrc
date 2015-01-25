@@ -22,6 +22,7 @@
   "globals": {
     "describe": false,
     "it": false,
+    "assert": false,
     "ok": false,
     "equal": false,
     "asyncTest": false,
@@ -29,12 +30,12 @@
     "deepEqual": false,
     "strictEqual": false,
     "notStrictEqual": false,
-    "start": false,
-    "stop": false,
     "expect": false,
     "throws": false,
 
-    "jQuery": true,
-    "$": true
+    "jQuery": false,
+    "$": false,
+
+    "ApiClient": false
   }
 }
