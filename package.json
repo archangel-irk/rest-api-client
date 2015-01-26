@@ -9,7 +9,6 @@
     "url": "https://github.com/archangel-irk/rest-api-client.git"
   },
   "devDependencies": {
-    "qunitjs": "latest",
     "promise": "latest",
     "gulp": "latest",
     "gulp-rename": "latest",
