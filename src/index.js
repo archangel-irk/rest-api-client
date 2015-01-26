@@ -592,5 +592,7 @@ ApiClient.prototype = {
   }
 };
 
+ApiClient.version = '0.2.0';
+
 // exports
 module.exports = ApiClient;
