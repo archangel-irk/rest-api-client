@@ -46,7 +46,7 @@
  simpleApi.post({ data }, { ajaxSettings });
  simpleApi.post( null, { ajaxSettings });
 
- simpleApi.read(doneCallback).done(callback).fail(callback);
+ simpleApi.read( done ).done( done ).fail( fail );
 
  Работа с документами (storage), он сам преобразуется через метод $__delta()
  simpleApi.post( Document );
@@ -187,12 +187,12 @@ var resourceMixin = {
       : this.url;
   },
 
-  _resourceRequest: function( method, ajaxSettings, doneCallback ){
+  _resourceRequest: function( method, ajaxSettings, done ){
     var url = this.constructUrl()
       , useNotifications = this.notifications;
 
     console.log( this.resourceName + '::' + method + ' ' + url );
-    return this.instance._request( method, url, ajaxSettings.data, ajaxSettings, useNotifications, doneCallback );
+    return this.instance._request( method, url, ajaxSettings.data, ajaxSettings, useNotifications, done );
   }
 };
 
@@ -218,22 +218,22 @@ _.forEach( Object.keys( methodsMap ), function( verb ){
    *
    * @param [data]
    * @param [ajaxSettings]
-   * @param [doneCallback]
+   * @param [done]
    * @returns {*}
    */
-  resourceMixin[ verb ] = function( data, ajaxSettings, doneCallback ){
+  resourceMixin[ verb ] = function( data, ajaxSettings, done ){
     var resource = this,
       identity = this.identity,
       method = this.instance.methodsMap[ verb],
       documentIdString;
 
-    // Если data - есть функция, то это doneCallback
+    // Если data - есть функция, то это done
     if ( $.isFunction( data ) ){
-      doneCallback = data;
+      done = data;
       data = undefined;
     }
     if ( $.isFunction( ajaxSettings ) ){
-      doneCallback = ajaxSettings;
+      done = ajaxSettings;
       ajaxSettings = undefined;
     }
 
@@ -274,7 +274,7 @@ _.forEach( Object.keys( methodsMap ), function( verb ){
       if ( resource.storage && identity && inCache ){
         // Если данное есть - вернуть его
         if ( inCache.result ){
-          doneCallback && doneCallback( inCache.result, inCache.meta );
+          done && done( inCache.result, inCache.meta );
           clearIdentity( resource );
           return;
         }
@@ -329,7 +329,7 @@ _.forEach( Object.keys( methodsMap ), function( verb ){
       reqInfo.meta = response.meta;
       requestsTable.push( reqInfo );
 
-      doneCallback && doneCallback( result, response.meta );
+      done && done( result, response.meta );
       dfd.resolve( result, response.meta, textStatus, jqXHR );
 
     }).fail(function( jqXHR, textStatus, errorThrown ){
@@ -523,7 +523,7 @@ ApiClient.instance = ApiClient.prototype = {
    *
    * @private
    */
-  _request: function( method, url, data, ajaxSettings, useNotifications, doneCallback ){
+  _request: function( method, url, data, ajaxSettings, useNotifications, done ){
     if ( !_.isString( method ) ){
       throw new Error('Параметр `method` должен быть строкой, а не ', method );
     }
@@ -550,7 +550,7 @@ ApiClient.instance = ApiClient.prototype = {
 
       // Unauthorized Callback
       if ( jqXHR.status === 401 && self.unauthorizedCallback ){
-        self.unauthorizedCallback( jqXHR, method, url, data, ajaxSettings, doneCallback );
+        self.unauthorizedCallback( jqXHR, method, url, data, ajaxSettings, done );
 
         // Не показывать сообщение с ошибкой при 401, если всё плохо, то роутер сам перекинет на форму входа
         if ( useNotifications ){
@@ -568,7 +568,7 @@ ApiClient.instance = ApiClient.prototype = {
       if ( useNotifications ){
         cf.notification[ notificationType ].hide();
       }
-    }).done( doneCallback );
+    }).done( done );
   },
 
   /**
@@ -576,19 +576,19 @@ ApiClient.instance = ApiClient.prototype = {
    * todo: сделать алиас на метод .get()
    *
    * @param ajaxSettings
-   * @param doneCallback
+   * @param done
    * @returns {$.Deferred}
    */
-  read: function( ajaxSettings, doneCallback ){
+  read: function( ajaxSettings, done ){
     console.log( 'api::read' );
     if ( $.isFunction( ajaxSettings ) ){
-      doneCallback = ajaxSettings;
+      done = ajaxSettings;
       ajaxSettings = undefined;
     }
 
     ajaxSettings = ajaxSettings || {};
 
-    return this._request('read', this.url, undefined, ajaxSettings, false, doneCallback );
+    return this._request('read', this.url, undefined, ajaxSettings, false, done );
   }
 };
 
