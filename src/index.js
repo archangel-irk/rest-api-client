@@ -81,7 +81,7 @@ var resourceMixin = {
 
     // Бросить исключение, если такой ресурс уже есть
     if ( this[ resourceName ] ){
-      throw new TypeError('Ресурс с названием ' + resourceName + 'уже есть.');
+      throw new TypeError('The resource named ' + resourceName + 'already exists.');
     }
 
     // Любой из этих параметров указывает на необходимость использовать хранилище
@@ -101,7 +101,7 @@ var resourceMixin = {
       if ( schema ){
         storage.createCollection( usersMixin.collectionName, schema, this[ resourceName ] );
       } else {
-        throw new TypeError('Resource::' + resourceName + ' Нельзя использовать хранилище (создать коллекцию), не указав схему данных');
+        throw new TypeError('Resource::' + resourceName + ' You cannot use storage (create collection), without specifying the schema of the data.');
       }
     }
 
