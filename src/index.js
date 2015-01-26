@@ -141,7 +141,7 @@ var resourceMixin = {
     if (!arg) return this;
 
     if (arguments.length !== 1) {
-      throw new Error("Invalid select: select only takes 1 argument");
+      throw new Error('Invalid select: select only takes 1 argument');
     }
 
     var fields = this._fields || (this._fields = {});
