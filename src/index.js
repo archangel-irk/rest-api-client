@@ -362,7 +362,7 @@ function clearIdentity( resource ){
  * @returns {Function} resource
  * @constructor
  */
-var Resource = function( resourceName, parentResource, usersMixin ){
+function Resource( resourceName, parentResource, usersMixin ){
 
   /**
    * Эту функцию мы отдаём пользователю в качестве доступа к ресурсу.
@@ -390,7 +390,7 @@ var Resource = function( resourceName, parentResource, usersMixin ){
   resource.instance = parentResource.instance || parentResource;
 
   return resource;
-};
+}
 
 /**
  * Создать новый экземпляр api клиента
@@ -421,47 +421,48 @@ var Resource = function( resourceName, parentResource, usersMixin ){
  *   }
  * });
  *
- * @param url - ссылка на корень api
- * @param options - опции для клиента
+ * @param url ссылка на корень api
+ * @param options опции для клиента
  */
-var ApiClient = function( url, options ){
-  return new ApiClient.instance.init( url, options );
-};
+function ApiClient( url, options ){
+  if ( !(this instanceof ApiClient) ) {
+    return new ApiClient( url, options );
+  }
 
-ApiClient.instance = ApiClient.prototype = {
-  constructor: ApiClient,
+  // Если первым агументом передан объект
+  if ( _.isObject( url ) ){
+    options = url;
+    url = location.origin;
+  }
+
+  if ( url == null ){
+    url = location.origin;
+  }
+
+  options = options || {};
+  options.url = url;
+
+  // По умолчанию, уведомления отключены
+  this.notifications = false;
 
   /**
-   * Инициализация нового апи клиента
-   * @param url
-   * @param options
+   * Хуки для ajax settings (выступает в роли базового ajaxSettings)
+   * @see http://api.jquery.com/jQuery.ajax/
+   *
+   * @type {Object}
    */
-  init: function( url, options ){
-    if ( typeof url === 'string' ){
-      options = options || {};
-      options.url = url;
-    }
+  this.hooks = {
+    // дополнительные данные запроса
+    data: {},
+    // Объект для добавления произвольных заголовков ко всем запросам
+    // удобно для авторизации по токенам
+    headers: {}
+  };
 
-    // По умолчанию, уведомления отключены
-    this.notifications = false;
+  $.extend( true, this, options );
+}
 
-    /**
-     * Хуки для ajax settings (выступает в роли базового ajaxSettings)
-     * @see http://api.jquery.com/jQuery.ajax/
-     *
-     * @type {Object}
-     */
-    this.hooks = {
-      // дополнительные данные запроса
-      data: {},
-      // Объект для добавления произвольных заголовков ко всем запросам
-      // удобно для авторизации по токенам
-      headers: {}
-    };
-
-    $.extend( true, this, $.isPlainObject( url ) ? url : options );
-  },
-
+ApiClient.prototype = {
   /**
    * Добавить новый ресурс
    * @see resourceMixin.add
@@ -480,7 +481,6 @@ ApiClient.instance = ApiClient.prototype = {
     // Добавляем авторизацию по токену
     if ( this.token && ajaxSettings.headers && ajaxSettings.headers.token == null ){
       _ajaxSettings.headers.Authorization = 'token ' + this.token;
-      //Accept: 'application/vnd.github.preview'
     }
 
     if ( type === 'GET' ){
@@ -513,12 +513,12 @@ ApiClient.instance = ApiClient.prototype = {
   /**
    * Отправить запрос на сервер
    *
-   * @param {string} method   Название метода (POST, GET, PUT, DELETE, PATCH)
-   * @param {string} url   Полный урл ресурса
-   * @param {object} data   Объект с данными для запроса
-   * @param {object} ajaxSettings   Объект с настройками
-   * @param {boolean} useNotifications   Флаг, использовать ли уведомления
-   * @param {function} doneCallback   Функция успешного обратного вызова
+   * @param {string} method Название метода (POST, GET, PUT, DELETE, PATCH)
+   * @param {string} url Полный урл ресурса
+   * @param {object} data Объект с данными для запроса
+   * @param {object} ajaxSettings Объект с настройками
+   * @param {boolean} useNotifications Флаг, использовать ли уведомления
+   * @param {function} done Функция успешного обратного вызова
    * @returns {$.Deferred} возвращает jquery ajax объект
    *
    * @private
@@ -591,8 +591,6 @@ ApiClient.instance = ApiClient.prototype = {
     return this._request('read', this.url, undefined, ajaxSettings, false, done );
   }
 };
-
-ApiClient.instance.init.prototype = ApiClient.instance;
 
 // exports
 module.exports = ApiClient;
