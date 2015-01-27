@@ -84,8 +84,8 @@ Resource - это функция со свойствами и методами, 
 И методы `create read update delete patch` служат только для отправки запросов:  
   `.read( headers, doneCallback )` - отправить get запрос.
 
-Todo
-===
-Кэширование и работа со [storage](https://github.com/archangel-irk/storage)  
-Добавить плагин notifications из cf.js  
-Сделать тесты (можно смотреть на https://github.com/tj/supertest)  
+## Todo
+* Кэширование и работа со [storage](https://github.com/archangel-irk/storage)
+* Добавить плагин notifications из cf.js
+* Сделать тесты (можно смотреть на https://github.com/tj/supertest)
+* Добавить свою репу как одно из решений в вопрос http://stackoverflow.com/questions/921942/javascript-rest-client
