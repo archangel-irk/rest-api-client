@@ -47,7 +47,50 @@
   console.log("after server.respond()");
 });*/
 
-var api = ApiClient('http://0.0.0.0:3000');
+
+
+var api = new ApiClient('http://0.0.0.0:3000');
+
+describe('utils', function(){
+  describe('select', function(){
+    it('with 0 args', function(){
+      assert.equal( undefined, ApiClient.utils.select() );
+    });
+
+    it('accepts an object', function(){
+      var o = { x: 1, y: 1 };
+      assert.deepEqual( ApiClient.utils.select( o ), o );
+    });
+
+    it('accepts a string', function(){
+      var o = 'x -y';
+      assert.deepEqual( ApiClient.utils.select( o ), { x: 1, y: 0 });
+    });
+
+    it('does not accept an array', function( done ){
+      assert.throws(function(){
+        var o = ['x', '-y'];
+        ApiClient.utils.select( o );
+      }, /Invalid select/);
+      done();
+    });
+
+    it('rejects non-string, object, arrays', function(){
+      assert.throws(function(){
+        ApiClient.utils.select(function(){});
+      }, /Invalid select\(\) argument/);
+    });
+
+    it('accepts aguments objects', function(){
+      function t(){
+        var fields = ApiClient.utils.select( arguments );
+        assert.deepEqual( fields, { x: 1, y: 0 });
+      }
+
+      t('x', '-y');
+    });
+  });
+});
 
 describe('ApiClient', function(){
   //this.timeout( 0 );
