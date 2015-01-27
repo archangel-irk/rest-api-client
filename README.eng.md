@@ -1,6 +1,6 @@
 # RESTfull api client (alpha)
 Build easy client to the RESTfull server api.  
-The library uses the approach of "chaining" challenges for the organization transparent query.  
+The library uses the approach of "chaining" for the organization transparent query.  
 Authorization is available on the token.  
 
 ## Dependencies
@@ -13,10 +13,10 @@ var github = ApiClient('https://api.github.com', {
   hooks: {
     headers: {
       Accept: 'application/vnd.github.v3+json',
-      Authorization: 'token 8fbfc540f1ed1417083c70a990b4db3c9aa86efe'
+      Authorization: 'token XXXXXX'
     }
   },
-  unauthorizedCallback: function(){} // Вызывается всякий раз, когда код ответа от сервера 401
+  unauthorizedCallback: function(){} // Called whenever a response code from the server 401
 });
 
 github.read();               // GET https://api.github.com
