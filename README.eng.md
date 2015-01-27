@@ -1,4 +1,6 @@
 # RESTfull api client (alpha)
+[english](README.eng.md) | [по-русски](README.md)
+
 Build easy client to the RESTfull server api.  
 The library uses the approach of "chaining" for the organization transparent query.  
 Authorization is available on the token.  
