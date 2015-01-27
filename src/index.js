@@ -569,28 +569,32 @@ ApiClient.prototype = {
         cf.notification[ notificationType ].hide();
       }
     }).done( done );
-  },
-
-  /**
-   * Метод для чтения корня api
-   * todo: сделать алиас на метод .get()
-   *
-   * @param ajaxSettings
-   * @param done
-   * @returns {$.Deferred}
-   */
-  read: function( ajaxSettings, done ){
-    console.log( 'api::read' );
-    if ( $.isFunction( ajaxSettings ) ){
-      done = ajaxSettings;
-      ajaxSettings = undefined;
-    }
-
-    ajaxSettings = ajaxSettings || {};
-
-    return this._request('read', this.url, undefined, ajaxSettings, false, done );
   }
 };
+
+/**
+ * Method for get request to api root
+ *
+ * @param ajaxSettings
+ * @param done
+ * @returns {$.Deferred}
+ */
+ApiClient.prototype.get = function( ajaxSettings, done ){
+  console.log( 'api::get' );
+  if ( $.isFunction( ajaxSettings ) ){
+    done = ajaxSettings;
+    ajaxSettings = undefined;
+  }
+
+  ajaxSettings = ajaxSettings || {};
+
+  return this._request('read', this.url, undefined, ajaxSettings, false, done );
+};
+/**
+ * @alias ApiClient.prototype.get
+ * @type {Function}
+ */
+ApiClient.prototype.read = ApiClient.prototype.get;
 
 ApiClient.version = '0.2.0';
 
