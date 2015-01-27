@@ -61,6 +61,8 @@
 
 'use strict';
 
+var utils = require('./utils');
+
 var resourceMixin = {
   resourceName: 'resource',
   url: '', // = resourceName
@@ -106,71 +108,6 @@ var resourceMixin = {
     }
 
     return this[ resourceName ];
-  },
-
-  /**
-   * https://github.com/aheckmann/mquery/blob/master/lib/mquery.js
-   * mquery.select
-   *
-   * Specifies which document fields to include or exclude
-   *
-   * ####String syntax
-   *
-   * When passing a string, prefixing a path with `-` will flag that path as excluded. When a path does not have the `-` prefix, it is included.
-   *
-   * ####Example
-   *
-   *     // include a and b, exclude c
-   *     query.select('a b -c');
-   *
-   *     // or you may use object notation, useful when
-   *     // you have keys already prefixed with a "-"
-   *     query.select({a: 1, b: 1, c: 0});
-   *
-   * ####Note
-   *
-   * Cannot be used with `distinct()`
-   *
-   * @param {Object|String} arg
-   * @return {Query} this
-   * @see SchemaType
-   * @api public
-   */
-  transformFields: function select () {
-    var arg = arguments[0];
-    if (!arg) return this;
-
-    if (arguments.length !== 1) {
-      throw new Error('Invalid select: select only takes 1 argument');
-    }
-
-    var fields = this._fields || (this._fields = {});
-    var type = typeof arg;
-
-    if ('string' == type || 'object' == type && 'number' == typeof arg.length && !Array.isArray(arg)) {
-      if ('string' == type)
-        arg = arg.split(/\s+/);
-
-      for (var i = 0, len = arg.length; i < len; ++i) {
-        var field = arg[i];
-        if (!field) continue;
-        var include = '-' == field[0] ? 0 : 1;
-        if (include === 0) field = field.substring(1);
-        fields[field] = include;
-      }
-
-      return this;
-    }
-
-    if (_.isObject(arg) && !Array.isArray(arg)) {
-      var keys = Object.keys(arg);
-      for (var i = 0; i < keys.length; ++i) {
-        fields[keys[i]] = arg[keys[i]];
-      }
-      return this;
-    }
-
-    throw new TypeError('Invalid select() argument. Must be string or object.');
   },
 
   // Пробежаться по всем родительским ресурсам и собрать url (без query string)
@@ -288,7 +225,7 @@ _.forEach( Object.keys( methodsMap ), function( verb ){
       //#example    vs.api.places({fields: 'name', skip: 100}).get(function(res){console.log(res)});
       // Если была выборка по полям, нужно правильно обработать её и передать в документ
       if ( data && data.fields ){
-        fields = resource.transformFields( data.fields );
+        fields = utils.select( data.fields );
       }
 
       // Есть ответ надо сохранить в хранилище
@@ -597,6 +534,8 @@ ApiClient.prototype.get = function( ajaxSettings, done ){
 ApiClient.prototype.read = ApiClient.prototype.get;
 
 ApiClient.version = '0.2.0';
+
+ApiClient.utils = utils;
 
 // exports
 module.exports = ApiClient;
