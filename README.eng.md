@@ -1,7 +1,7 @@
 # RESTfull api client (alpha)
-Build easy client to the RESTfull server api.
-The library uses the approach of "chaining" challenges for the organization transparent query.
-Authorization is available on the token.
+Build easy client to the RESTfull server api.  
+The library uses the approach of "chaining" challenges for the organization transparent query.  
+Authorization is available on the token.  
 
 ## Dependencies
 1. lodash
