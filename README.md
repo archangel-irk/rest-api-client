@@ -1,16 +1,15 @@
-RESTfull api client
----
+# RESTfull api client
+[english](README.eng.md) | [по-русски](README.md)
+
 Постройте удобный клиент к серверному api.
 Библиотека использует подход "цепочки вызывов" для организации прозрачного запроса.
 Авторизация доступна по токену.
 
-Dependencies
----
+## Dependencies
 1. lodash
 2. jQuery ajax
 
-Basic usage
----
+## Basic usage
 ```javascript
 var github = ApiClient('https://api.github.com', {
   hooks: {
@@ -33,8 +32,7 @@ github.users('archangel-irk').repos.read();                        // GET /users
 github.users('archangel-irk').repos.read({ sort: 'pushed' });      // GET /users/archangel-irk/repos?sort=pushed
 ```
 
-Вызов родительских функций
----
+## Вызов родительских функций
 ```javascript
 github.add('search', {
   searchMethod: function(){
@@ -50,8 +48,7 @@ github.search.add('users', {
 github.search.users.usersMethod(); // search::searchMethod
 ```
 
-Api
----
+## Api
 Сначала опишем самый верхний уровень.  
 `ApiClient( url, options )` - функция-конструктор апи клиента, но также используется как обычный объект с методами.
   `url` - адрес к апи, может быть относительным или полным.
