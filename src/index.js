@@ -222,7 +222,8 @@ _.forEach( Object.keys( methodsMap ), function( verb ){
     this._resourceRequest( verb, ajaxSettings ).done(function( response, textStatus, jqXHR ){
       var result, fields;
 
-      //#example    vs.api.places({fields: 'name', skip: 100}).get(function(res){console.log(res)});
+      // #example
+      // api.places({ fields: 'name', skip: 100 });
       // Если была выборка по полям, нужно правильно обработать её и передать в документ
       if ( data && data.fields ){
         fields = utils.select( data.fields );
@@ -330,10 +331,10 @@ function Resource( resourceName, parentResource, usersMixin ){
 }
 
 /**
- * Создать новый экземпляр api клиента
+ * Create new api client
  *
  * @example
- * ApiClient('/api', {
+ * var api = new ApiClient('/api', {
  *   hooks: {
  *     headers: {
  *       token: 'XXXXXX'
@@ -341,7 +342,7 @@ function Resource( resourceName, parentResource, usersMixin ){
  *   }
  * });
  *
- * ApiClient('https://domain.com/api', {
+ * var api = new ApiClient('https://domain.com/api', {
  *   hooks: {
  *     headers: {
  *       token: 'XXXXXX'
@@ -349,7 +350,7 @@ function Resource( resourceName, parentResource, usersMixin ){
  *   }
  * });
  *
- * ApiClient({
+ * var api = new ApiClient({
  *   url: '/api'
  *   hooks: {
  *     headers: {
@@ -358,15 +359,15 @@ function Resource( resourceName, parentResource, usersMixin ){
  *   }
  * });
  *
- * @param url ссылка на корень api
- * @param options опции для клиента
+ * @param url api root url
+ * @param options api client options
  */
 function ApiClient( url, options ){
   if ( !(this instanceof ApiClient) ) {
     return new ApiClient( url, options );
   }
 
-  // Если первым агументом передан объект
+  // If first arg is object
   if ( _.isObject( url ) ){
     options = url;
     url = location.origin;
@@ -379,11 +380,11 @@ function ApiClient( url, options ){
   options = options || {};
   options.url = url;
 
-  // По умолчанию, уведомления отключены
+  // Defaults, notifications is off
   this.notifications = false;
 
   /**
-   * Хуки для ajax settings (выступает в роли базового ajaxSettings)
+   * hooks for ajax settings (as base ajaxSettings)
    * @see http://api.jquery.com/jQuery.ajax/
    *
    * @type {Object}
@@ -448,7 +449,7 @@ ApiClient.prototype = {
   },
 
   /**
-   * Отправить запрос на сервер
+   * Send request on server
    *
    * @param {string} method Название метода (POST, GET, PUT, DELETE, PATCH)
    * @param {string} url Полный урл ресурса
