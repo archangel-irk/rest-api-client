@@ -248,12 +248,48 @@ describe('ApiClient', function(){
   });
 
   describe('GET', function(){
-    it('', function( done ){
+    it('users with resource function call and .done()', function( done ){
       var api = new ApiClient('http://0.0.0.0:3000');
 
       api.add('users');
 
       api.users().read().done(function( data ){
+        assert.deepEqual( data, [{ user: 'tobi' },{ user: 'loki' }] );
+
+        done();
+      });
+    });
+
+    it('users without resource function call and .done()', function( done ){
+      var api = new ApiClient('http://0.0.0.0:3000');
+
+      api.add('users');
+
+      api.users.read().done(function( data ){
+        assert.deepEqual( data, [{ user: 'tobi' },{ user: 'loki' }] );
+
+        done();
+      });
+    });
+
+    it('users with resource function call and callback', function( done ){
+      var api = new ApiClient('http://0.0.0.0:3000');
+
+      api.add('users');
+
+      api.users().read(function( data ){
+        assert.deepEqual( data, [{ user: 'tobi' },{ user: 'loki' }] );
+
+        done();
+      });
+    });
+
+    it('users without resource function call and callback', function( done ){
+      var api = new ApiClient('http://0.0.0.0:3000');
+
+      api.add('users');
+
+      api.users.read(function( data ){
         assert.deepEqual( data, [{ user: 'tobi' },{ user: 'loki' }] );
 
         done();
