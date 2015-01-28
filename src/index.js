@@ -535,6 +535,10 @@ function Resource( resourceName, parentResource, usersMixin ){
    * @returns {Function}
    */
   var resource = function resource( identity ){
+    if ( identity == null ){
+      return resource;
+    }
+
     if ( identity && !utils.isString( identity ) ){
       console.error('identity должен быть строкой, а не', identity );
     }
