@@ -223,10 +223,19 @@ describe('utils', function(){
 describe('ApiClient', function(){
   //this.timeout( 0 );
 
-  it('read root', function( done ){
+  it('read root .done()', function( done ){
     var api = new ApiClient('http://0.0.0.0:3000');
 
     api.read().done(function( data ){
+      assert.equal( data.user, 'tobi' );
+
+      done();
+    });
+  });
+  it('read root with callback', function( done ){
+    var api = new ApiClient('http://0.0.0.0:3000');
+
+    api.read(function( data ){
       assert.equal( data.user, 'tobi' );
 
       done();
