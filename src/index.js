@@ -767,7 +767,7 @@ ApiClient.prototype.get = function( ajaxSettings, done ){
  */
 ApiClient.prototype.read = ApiClient.prototype.get;
 
-ApiClient.version = '0.2.0';
+ApiClient.version = '0.3.0';
 
 ApiClient.utils = utils;
 
