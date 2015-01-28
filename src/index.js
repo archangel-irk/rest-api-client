@@ -147,7 +147,7 @@ var methodsMap = {
   'save':   'PUT'
 };
 
-_.forEach( Object.keys( methodsMap ), function( verb ){
+Object.keys( methodsMap ).forEach(function( verb ){
   /**
    * Запросы create read update delete patch get post
    *
@@ -310,7 +310,7 @@ function Resource( resourceName, parentResource, usersMixin ){
    * @returns {Function}
    */
   var resource = function resource( identity ){
-    if ( identity && !_.isString( identity ) ){
+    if ( identity && !utils.isString( identity ) ){
       console.error('identity должен быть строкой, а не', identity );
     }
 
@@ -368,7 +368,7 @@ function ApiClient( url, options ){
   }
 
   // If first arg is object
-  if ( _.isObject( url ) ){
+  if ( utils.isObject( url ) ){
     options = url;
     url = location.origin;
   }
@@ -410,11 +410,11 @@ ApiClient.prototype = {
   methodsMap: methodsMap,
 
   _prepareAjaxSettings: function( method, url, data, ajaxSettings ){
-    var type = this.methodsMap[ method ]
-      , _ajaxSettings = $.extend( true, {}, this.hooks, ajaxSettings, {
-        type: type,
-        url: url
-      });
+    var type = this.methodsMap[ method ];
+    var _ajaxSettings = utils.deepMerge( this.hooks, ajaxSettings );
+
+    _ajaxSettings.type = type;
+    _ajaxSettings.url = url;
 
     // Добавляем авторизацию по токену
     if ( this.token && ajaxSettings.headers && ajaxSettings.headers.token == null ){
@@ -422,14 +422,14 @@ ApiClient.prototype = {
     }
 
     if ( type === 'GET' ){
-      _.assign( _ajaxSettings.data, data );
+      _ajaxSettings.data = utils.deepMerge( _ajaxSettings.data, data );
     } else {
       // Если сохраняем документ, нужно сделать toObject({depopulate: 1})
       if ( data && data.constructor && data.constructor.name && data.constructor.name === 'Document' ){
-        _.assign( _ajaxSettings.data, data.toObject({depopulate: 1}) );
+        _ajaxSettings.data = utils.deepMerge( _ajaxSettings.data, data.toObject({depopulate: 1}) );
 
       } else if ( data ) {
-        _.assign( _ajaxSettings.data, data );
+        _ajaxSettings.data = utils.deepMerge( _ajaxSettings.data, data );
       }
 
       if ( _ajaxSettings.data && _ajaxSettings.contentType === 'application/json' ){
@@ -462,7 +462,7 @@ ApiClient.prototype = {
    * @private
    */
   _request: function( method, url, data, ajaxSettings, useNotifications, done ){
-    if ( !_.isString( method ) ){
+    if ( !utils.isString( method ) ){
       throw new Error('Параметр `method` должен быть строкой, а не ', method );
     }
 
@@ -473,7 +473,7 @@ ApiClient.prototype = {
 
     // Использовать значение по умолчанию, если useNotifications не задан
     // тут же порверяем, подключены ли уведомления
-    if ( _.isBoolean( useNotifications ) ){
+    if ( utils.isBoolean( useNotifications ) ){
       useNotifications = useNotifications && cf.notification;
     } else {
       useNotifications = this.notifications && cf.notification;
