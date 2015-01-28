@@ -39,6 +39,10 @@ app.get('/', function( req, res ){
   res.json({ user: 'tobi' });
 });
 
+app.get('/users', function( req, res ){
+  res.json([{ user: 'tobi' },{ user: 'loki' }]);
+});
+
 var server = app.listen( app.get('port'), function(){
 
   var host = server.address().address;
