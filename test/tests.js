@@ -223,6 +223,10 @@ describe('utils', function(){
 describe('ApiClient', function(){
   //this.timeout( 0 );
 
+  it('create without `new`', function(  ){
+    assert.ok( ApiClient() instanceof ApiClient );
+  });
+
   it('read root .done()', function( done ){
     var api = new ApiClient('http://0.0.0.0:3000');
 
