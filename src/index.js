@@ -111,11 +111,11 @@ var resourceMixin = {
   },
 
   // Пробежаться по всем родительским ресурсам и собрать url (без query string)
-  constructUrl: function constructUrl( recursionCall ){
+  constructUrl: function constructUrl( trailingSlash ){
     // todo: проверить надобность закомментированного кода
     // trailingSlash - он иногда нужен, сделать конфиг
     // условие с recursionCall добавляет слэш в урл перед знаком вопроса
-    //var identity = this.identity ? '/' + this.identity : recursionCall ? '' : '/';
+    //var identity = this.identity ? '/' + this.identity : trailingSlash ? '' : '/';
     var identity = this.identity ? '/' + this.identity : '';
 
     // Пробежаться по всем ресурсам и заглянуть в корень апи, чтобы собрать url
