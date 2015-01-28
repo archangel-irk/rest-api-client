@@ -19,6 +19,7 @@
     "body-parser": "latest",
     "gulp-develop-server": "latest",
     "karma": "latest",
+    "karma-coverage": "latest",
     "karma-mocha": "latest",
     "karma-chai": "latest",
     "karma-chrome-launcher": "latest"

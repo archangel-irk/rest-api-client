@@ -6,7 +6,7 @@ module.exports = function (config) {
     files: [
       'vendor/jquery-2.1.3.js',
       'vendor/lodash.js',
-      'dist/api-client.min.js',
+      'dist/api-client.js',
       'test/*.js'
     ],
 
@@ -27,8 +27,22 @@ module.exports = function (config) {
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
     reporters: [
-      'progress'
+      'progress',
+      'coverage'
     ],
+
+    preprocessors: {
+      // source files, that you wanna generate coverage for
+      // do not include tests or libraries
+      // (these files will be instrumented by Istanbul)
+      'dist/api-client.js': ['coverage']
+    },
+
+    // optionally, configure the reporter
+    coverageReporter: {
+      type: 'html',
+      dir: 'test/coverage'
+    },
 
     // enable / disable colors in the output (reporters and logs)
     colors: true,
