@@ -147,141 +147,374 @@ var methodsMap = {
   'save':   'PUT'
 };
 
-Object.keys( methodsMap ).forEach(function( verb ){
-  /**
-   * Запросы create read update delete patch get post
-   *
-   * В ajaxSettings можно указать поле doNotStore - чтобы не сохранять полученный объект в storage
-   *
-   * @param [data]
-   * @param [ajaxSettings]
-   * @param [done]
-   * @returns {*}
-   */
-  resourceMixin[ verb ] = function( data, ajaxSettings, done ){
-    var resource = this,
-      identity = this.identity,
-      method = this.instance.methodsMap[ verb],
-      documentIdString;
+/**
+ * Запросы create read update delete patch get post
+ *
+ * В ajaxSettings можно указать поле doNotStore - чтобы не сохранять полученный объект в storage
+ *
+ * @param [data]
+ * @param [ajaxSettings]
+ * @param [done]
+ * @returns {*}
+ */
+resourceMixin.get = function( data, ajaxSettings, done ){
+  var resource = this;
+  var identity = this.identity;
+  var method = 'GET';
 
-    // Если data - есть функция, то это done
-    if ( $.isFunction( data ) ){
-      done = data;
-      data = undefined;
-    }
-    if ( $.isFunction( ajaxSettings ) ){
-      done = ajaxSettings;
-      ajaxSettings = undefined;
-    }
+  // Если data - есть функция, то это done
+  if ( $.isFunction( data ) ){
+    done = data;
+    data = undefined;
+  }
+  if ( $.isFunction( ajaxSettings ) ){
+    done = ajaxSettings;
+    ajaxSettings = undefined;
+  }
 
-    ajaxSettings = ajaxSettings || {};
+  ajaxSettings = ajaxSettings || {};
+  ajaxSettings.data = data;
 
-    // При сохранении документа нужно сохранять только изменённые поля
-    if ( method === 'POST' || method === 'PUT' ){
-      // Иногда передают документ
-      if ( data instanceof storage.Document ) {
-        documentIdString = data._id.toString();
-        data = data.$__delta();
-
-        // Так можно понять, что мы сохраняем сущетвующий на сервере Document
-      } else if ( storage.ObjectId.isValid( identity ) ) {
-        documentIdString = identity;
-
-        // При сохранении через метод save() у документа
-      } else if ( data._id && storage.ObjectId.isValid( data._id ) ) {
-        documentIdString = data._id.toString();
-      }
-    }
-
-    ajaxSettings.data = data;
-
-    var reqInfo = {
-      method: method,
-      url: this.constructUrl(),
-      ajaxSettings: ajaxSettings,
-      result: null,
-      meta: null
-    };
-
-    //TODO: доделать кэширование
-    // Кэширование на чтение
-    if ( method === 'GET' ){
-      var inCache = _.find( requestsTable, reqInfo );
-
-      if ( resource.storage && identity && inCache ){
-        // Если данное есть - вернуть его
-        if ( inCache.result ){
-          done && done( inCache.result, inCache.meta );
-          clearIdentity( resource );
-          return;
-        }
-      }
-    }
-
-    var dfd = $.Deferred();
-    this._resourceRequest( verb, ajaxSettings ).done(function( response, textStatus, jqXHR ){
-      var result, fields;
-
-      // #example
-      // api.places({ fields: 'name', skip: 100 });
-      // Если была выборка по полям, нужно правильно обработать её и передать в документ
-      if ( data && data.fields ){
-        fields = utils.select( data.fields );
-      }
-
-      // Есть ответ надо сохранить в хранилище
-      if ( resource.storage && !ajaxSettings.doNotStore ){
-        // При сохранении и обновлении нужно обновлять документ
-        if ( method === 'POST' || method === 'PUT' ){
-          // Попробуем сначала найти документ по id и обновить его
-          result = storage[ resource.collectionName ].findById( documentIdString );
-
-          if ( result ){
-            // Обновляем документ
-            result.set( response.result );
-
-            // Создаём ссылку по новому id в коллекции
-            storage[ resource.collectionName ].updateIdLink( result );
-
-            // Этот документ теперь сохранён на сервере, значит он уже не новый.
-            result.isNew = false;
-
-          } else {
-            result = storage[ resource.collectionName ].add( response.result || response, undefined, true );
-          }
-
-        } else if ( method === 'GET' ){
-          // Не добавлять в хранилище результат запросов с выборкой полей
-          if ( fields ){
-            result = response.result;
-          } else {
-            result = storage[ resource.collectionName ].add( response.result || response, fields, true );
-          }
-        }
-      } else {
-        result = response.result || response;
-      }
-
-      // Сохранить параметры запроса и ответ для кэширования
-      reqInfo.result = result;
-      reqInfo.meta = response.meta;
-      requestsTable.push( reqInfo );
-
-      done && done( result, response.meta );
-      dfd.resolve( result, response.meta, textStatus, jqXHR );
-
-    }).fail(function( jqXHR, textStatus, errorThrown ){
-      dfd.reject( jqXHR, textStatus, errorThrown );
-    });
-
-    //TODO: Использовать идеологю query? query объект для построения запросов
-
-    // identity сохраняется для constructUrl, его нужно очистить для последующих запросов.
-    clearIdentity( resource );
-
-    return dfd;
+  var reqInfo = {
+    method: method,
+    url: this.constructUrl(),
+    ajaxSettings: ajaxSettings,
+    result: null,
+    meta: null
   };
-});
+
+  //TODO: доделать кэширование
+  // Кэширование на чтение
+  if ( method === 'GET' ){
+    var inCache = _.find( requestsTable, reqInfo );
+
+    if ( resource.storage && identity && inCache ){
+      // Если данное есть - вернуть его
+      if ( inCache.result ){
+        done && done( inCache.result, inCache.meta );
+        clearIdentity( resource );
+        return;
+      }
+    }
+  }
+
+  var dfd = $.Deferred();
+  this._resourceRequest( method, ajaxSettings ).done(function( response, textStatus, jqXHR ){
+    var result, fields;
+
+    // #example
+    // api.places({ fields: 'name', skip: 100 });
+    // Если была выборка по полям, нужно правильно обработать её и передать в документ
+    if ( data && data.fields ){
+      fields = utils.select( data.fields );
+    }
+
+    // Есть ответ надо сохранить в хранилище
+    if ( resource.storage && !ajaxSettings.doNotStore ){
+      // Не добавлять в хранилище результат запросов с выборкой полей
+      if ( fields ){
+        result = response.result;
+      } else {
+        result = storage[ resource.collectionName ].add( response.result || response, fields, true );
+      }
+    } else {
+      result = response.result || response;
+    }
+
+    // Сохранить параметры запроса и ответ для кэширования
+    reqInfo.result = result;
+    reqInfo.meta = response.meta;
+    requestsTable.push( reqInfo );
+
+    done && done( result, response.meta );
+    dfd.resolve( result, response.meta, textStatus, jqXHR );
+
+  }).fail(function( jqXHR, textStatus, errorThrown ){
+    dfd.reject( jqXHR, textStatus, errorThrown );
+  });
+
+  //TODO: Использовать идеологю query? query объект для построения запросов
+
+  // identity сохраняется для constructUrl, его нужно очистить для последующих запросов.
+  clearIdentity( resource );
+
+  return dfd;
+};
+resourceMixin.read = resourceMixin.get;
+
+resourceMixin.post = function( data, ajaxSettings, done ){
+  var resource = this;
+  var identity = this.identity;
+  var method = 'POST';
+  var documentIdString;
+
+  // Если data - есть функция, то это done
+  if ( $.isFunction( data ) ){
+    done = data;
+    data = undefined;
+  }
+  if ( $.isFunction( ajaxSettings ) ){
+    done = ajaxSettings;
+    ajaxSettings = undefined;
+  }
+
+  ajaxSettings = ajaxSettings || {};
+
+  // При сохранении документа нужно сохранять только изменённые поля
+  // Иногда передают документ
+  if ( data instanceof storage.Document ) {
+    documentIdString = data._id.toString();
+    data = data.$__delta();
+
+    // Так можно понять, что мы сохраняем сущетвующий на сервере Document
+  } else if ( storage.ObjectId.isValid( identity ) ) {
+    documentIdString = identity;
+
+    // При сохранении через метод save() у документа
+  } else if ( data._id && storage.ObjectId.isValid( data._id ) ) {
+    documentIdString = data._id.toString();
+  }
+
+  ajaxSettings.data = data;
+
+  var dfd = $.Deferred();
+  this._resourceRequest( method, ajaxSettings ).done(function( response, textStatus, jqXHR ){
+    var result;
+
+    // Есть ответ надо сохранить в хранилище
+    if ( resource.storage && !ajaxSettings.doNotStore ){
+      // При сохранении нужно обновлять документ
+      // Попробуем сначала найти документ по id и обновить его
+      result = storage[ resource.collectionName ].findById( documentIdString );
+
+      if ( result ){
+        // Обновляем документ
+        result.set( response.result );
+
+        // Создаём ссылку по новому id в коллекции
+        storage[ resource.collectionName ].updateIdLink( result );
+
+        // Этот документ теперь сохранён на сервере, значит он уже не новый.
+        result.isNew = false;
+
+      } else {
+        result = storage[ resource.collectionName ].add( response.result || response, undefined, true );
+      }
+    } else {
+      result = response.result || response;
+    }
+
+    done && done( result, response.meta );
+    dfd.resolve( result, response.meta, textStatus, jqXHR );
+
+  }).fail(function( jqXHR, textStatus, errorThrown ){
+    dfd.reject( jqXHR, textStatus, errorThrown );
+  });
+
+  //TODO: Использовать идеологю query? query объект для построения запросов
+
+  // identity сохраняется для constructUrl, его нужно очистить для последующих запросов.
+  clearIdentity( resource );
+
+  return dfd;
+};
+resourceMixin.create = resourceMixin.post;
+
+resourceMixin.put = function( data, ajaxSettings, done ){
+  var resource = this;
+  var identity = this.identity;
+  var method = 'PUT';
+  var documentIdString;
+
+  // Если data - есть функция, то это done
+  if ( $.isFunction( data ) ){
+    done = data;
+    data = undefined;
+  }
+  if ( $.isFunction( ajaxSettings ) ){
+    done = ajaxSettings;
+    ajaxSettings = undefined;
+  }
+
+  ajaxSettings = ajaxSettings || {};
+
+  // При сохранении документа нужно сохранять только изменённые поля
+  // Иногда передают документ
+  if ( data instanceof storage.Document ) {
+    documentIdString = data._id.toString();
+    data = data.$__delta();
+
+    // Так можно понять, что мы сохраняем сущетвующий на сервере Document
+  } else if ( storage.ObjectId.isValid( identity ) ) {
+    documentIdString = identity;
+
+    // При сохранении через метод save() у документа
+  } else if ( data._id && storage.ObjectId.isValid( data._id ) ) {
+    documentIdString = data._id.toString();
+  }
+
+  ajaxSettings.data = data;
+
+  var dfd = $.Deferred();
+  this._resourceRequest( method, ajaxSettings ).done(function( response, textStatus, jqXHR ){
+    var result;
+
+    // Есть ответ надо сохранить в хранилище
+    if ( resource.storage && !ajaxSettings.doNotStore ){
+      // При сохранении нужно обновлять документ
+      // Попробуем сначала найти документ по id и обновить его
+      result = storage[ resource.collectionName ].findById( documentIdString );
+
+      if ( result ){
+        // Обновляем документ
+        result.set( response.result );
+
+        // Создаём ссылку по новому id в коллекции
+        storage[ resource.collectionName ].updateIdLink( result );
+
+        // Этот документ теперь сохранён на сервере, значит он уже не новый.
+        result.isNew = false;
+
+      } else {
+        result = storage[ resource.collectionName ].add( response.result || response, undefined, true );
+      }
+    } else {
+      result = response.result || response;
+    }
+
+    done && done( result, response.meta );
+    dfd.resolve( result, response.meta, textStatus, jqXHR );
+
+  }).fail(function( jqXHR, textStatus, errorThrown ){
+    dfd.reject( jqXHR, textStatus, errorThrown );
+  });
+
+  //TODO: Использовать идеологю query? query объект для построения запросов
+
+  // identity сохраняется для constructUrl, его нужно очистить для последующих запросов.
+  clearIdentity( resource );
+
+  return dfd;
+};
+resourceMixin.update = resourceMixin.put;
+resourceMixin.save = resourceMixin.put;
+
+resourceMixin.patch = function( data, ajaxSettings, done ){
+  var resource = this;
+  var identity = this.identity;
+  var method = 'PATCH';
+  var documentIdString;
+
+  // Если data - есть функция, то это done
+  if ( $.isFunction( data ) ){
+    done = data;
+    data = undefined;
+  }
+  if ( $.isFunction( ajaxSettings ) ){
+    done = ajaxSettings;
+    ajaxSettings = undefined;
+  }
+
+  ajaxSettings = ajaxSettings || {};
+
+  // При сохранении документа нужно сохранять только изменённые поля
+  // Иногда передают документ
+  if ( data instanceof storage.Document ) {
+    documentIdString = data._id.toString();
+    data = data.$__delta();
+
+    // Так можно понять, что мы сохраняем сущетвующий на сервере Document
+  } else if ( storage.ObjectId.isValid( identity ) ) {
+    documentIdString = identity;
+
+    // При сохранении через метод save() у документа
+  } else if ( data._id && storage.ObjectId.isValid( data._id ) ) {
+    documentIdString = data._id.toString();
+  }
+
+  ajaxSettings.data = data;
+
+  var dfd = $.Deferred();
+  this._resourceRequest( method, ajaxSettings ).done(function( response, textStatus, jqXHR ){
+    var result;
+
+    // Есть ответ надо сохранить в хранилище
+    if ( resource.storage && !ajaxSettings.doNotStore ){
+      // При PATCH нужно обновлять документ
+      // Попробуем сначала найти документ по id и обновить его
+      result = storage[ resource.collectionName ].findById( documentIdString );
+
+      if ( result ){
+        // Обновляем документ
+        result.set( response.result );
+
+        // Создаём ссылку по новому id в коллекции
+        storage[ resource.collectionName ].updateIdLink( result );
+
+        // Этот документ теперь сохранён на сервере, значит он уже не новый.
+        result.isNew = false;
+
+      } else {
+        result = storage[ resource.collectionName ].add( response.result || response, undefined, true );
+      }
+    } else {
+      result = response.result || response;
+    }
+
+    //todo: можно добавить кэш на последующие GET и HEAD запросы (http://tools.ietf.org/html/rfc5789)
+
+    done && done( result, response.meta );
+    dfd.resolve( result, response.meta, textStatus, jqXHR );
+
+  }).fail(function( jqXHR, textStatus, errorThrown ){
+    dfd.reject( jqXHR, textStatus, errorThrown );
+  });
+
+  //TODO: Использовать идеологю query? query объект для построения запросов
+
+  // identity сохраняется для constructUrl, его нужно очистить для последующих запросов.
+  clearIdentity( resource );
+
+  return dfd;
+};
+
+resourceMixin.delete = function( data, ajaxSettings, done ){
+  var resource = this;
+  var method = 'DELETE';
+
+  // Если data - есть функция, то это done
+  if ( $.isFunction( data ) ){
+    done = data;
+    data = undefined;
+  }
+  if ( $.isFunction( ajaxSettings ) ){
+    done = ajaxSettings;
+    ajaxSettings = undefined;
+  }
+
+  ajaxSettings = ajaxSettings || {};
+  ajaxSettings.data = data;
+
+  var dfd = $.Deferred();
+  this._resourceRequest( method, ajaxSettings ).done(function( response, textStatus, jqXHR ){
+    var result;
+
+    result = response.result || response;
+
+    done && done( result, response.meta );
+    dfd.resolve( result, response.meta, textStatus, jqXHR );
+
+  }).fail(function( jqXHR, textStatus, errorThrown ){
+    dfd.reject( jqXHR, textStatus, errorThrown );
+  });
+
+  //TODO: Использовать идеологю query? query объект для построения запросов
+
+  // identity сохраняется для constructUrl, его нужно очистить для последующих запросов.
+  clearIdentity( resource );
+
+  return dfd;
+};
 
 // Очистить identity у ресурса и его родительских ресурсов тоже
 function clearIdentity( resource ){
