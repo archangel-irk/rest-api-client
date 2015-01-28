@@ -266,11 +266,11 @@ resourceMixin.post = function( data, ajaxSettings, done ){
     documentIdString = data._id.toString();
     data = data.$__delta();
 
-    // Так можно понять, что мы сохраняем сущетвующий на сервере Document
+  // Так можно понять, что мы сохраняем сущетвующий на сервере Document
   } else if ( storage.ObjectId.isValid( identity ) ) {
     documentIdString = identity;
 
-    // При сохранении через метод save() у документа
+  // При сохранении через метод save() у документа
   } else if ( data._id && storage.ObjectId.isValid( data._id ) ) {
     documentIdString = data._id.toString();
   }
@@ -310,8 +310,6 @@ resourceMixin.post = function( data, ajaxSettings, done ){
   }).fail(function( jqXHR, textStatus, errorThrown ){
     dfd.reject( jqXHR, textStatus, errorThrown );
   });
-
-  //TODO: Использовать идеологю query? query объект для построения запросов
 
   // identity сохраняется для constructUrl, его нужно очистить для последующих запросов.
   clearIdentity( resource );
@@ -388,8 +386,6 @@ resourceMixin.put = function( data, ajaxSettings, done ){
   }).fail(function( jqXHR, textStatus, errorThrown ){
     dfd.reject( jqXHR, textStatus, errorThrown );
   });
-
-  //TODO: Использовать идеологю query? query объект для построения запросов
 
   // identity сохраняется для constructUrl, его нужно очистить для последующих запросов.
   clearIdentity( resource );
@@ -470,8 +466,6 @@ resourceMixin.patch = function( data, ajaxSettings, done ){
     dfd.reject( jqXHR, textStatus, errorThrown );
   });
 
-  //TODO: Использовать идеологю query? query объект для построения запросов
-
   // identity сохраняется для constructUrl, его нужно очистить для последующих запросов.
   clearIdentity( resource );
 
@@ -507,8 +501,6 @@ resourceMixin.delete = function( data, ajaxSettings, done ){
   }).fail(function( jqXHR, textStatus, errorThrown ){
     dfd.reject( jqXHR, textStatus, errorThrown );
   });
-
-  //TODO: Использовать идеологю query? query объект для построения запросов
 
   // identity сохраняется для constructUrl, его нужно очистить для последующих запросов.
   clearIdentity( resource );
