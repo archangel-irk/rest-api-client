@@ -236,6 +236,7 @@ describe('ApiClient', function(){
       done();
     });
   });
+
   it('read root with callback', function( done ){
     var api = new ApiClient('http://0.0.0.0:3000');
 
@@ -243,6 +244,20 @@ describe('ApiClient', function(){
       assert.equal( data.user, 'tobi' );
 
       done();
+    });
+  });
+
+  describe('GET', function(){
+    it('', function( done ){
+      var api = new ApiClient('http://0.0.0.0:3000');
+
+      api.add('users');
+
+      api.users().read().done(function( data ){
+        assert.deepEqual( data, [{ user: 'tobi' },{ user: 'loki' }] );
+
+        done();
+      });
     });
   });
 });
