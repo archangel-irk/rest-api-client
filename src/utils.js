@@ -46,16 +46,14 @@ function isObjectLike(value) {
  * Checks if `value` is classified as a `String` primitive or object.
  *
  * @static
- * @memberOf _
- * @category Lang
  * @param {*} value The value to check.
  * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
  * @example
  *
- * _.isString('abc');
+ * utils.isString('abc');
  * // => true
  *
- * _.isString(1);
+ * utils.isString(1);
  * // => false
  */
 utils.isString = function isString( value ) {
@@ -66,16 +64,14 @@ utils.isString = function isString( value ) {
  * Checks if `value` is classified as a boolean primitive or object.
  *
  * @static
- * @memberOf _
- * @category Lang
  * @param {*} value The value to check.
  * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
  * @example
  *
- * _.isBoolean(false);
+ * utils.isBoolean(false);
  * // => true
  *
- * _.isBoolean(null);
+ * utils.isBoolean(null);
  * // => false
  */
 utils.isBoolean = function isBoolean(value) {
@@ -93,20 +89,43 @@ utils.isBoolean = function isBoolean(value) {
  * @returns {boolean} Returns `true` if `value` is an object, else `false`.
  * @example
  *
- * _.isObject({});
+ * utils.isObject({});
  * // => true
  *
- * _.isObject([1, 2, 3]);
+ * utils.isObject([1, 2, 3]);
  * // => true
  *
- * _.isObject(1);
+ * utils.isObject(1);
+ * // => false
+ *
+ * utils.isObject(function(){});
  * // => false
  */
 utils.isObject = function isObject( value ) {
   // Avoid a V8 JIT bug in Chrome 19-20.
   // See https://code.google.com/p/v8/issues/detail?id=2291 for more details.
   var type = typeof value;
-  return type === 'function' || (value && type === 'object') || false;
+  return (value && value !== null && type === 'object') || false;
+};
+
+/**
+ * Checks if `value` is classified as a `Function` object.
+ *
+ * @static
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
+ * @example
+ *
+ * utils.isFunction(function(){});
+ * // => true
+ *
+ * utils.isFunction(/abc/);
+ * // => false
+ */
+utils.isFunction = function isFunction(value) {
+  // Avoid a Chakra JIT bug in compatibility modes of IE 11.
+  // See https://github.com/jashkenas/underscore/issues/1621 for more details.
+  return typeof value === 'function' || false;
 };
 
 // https://github.com/nrf110/deepmerge
@@ -219,7 +238,7 @@ utils.select = function select( selection ){
     return fields;
   }
 
-  if (_.isPlainObject( selection ) && !Array.isArray( selection )) {
+  if ( utils.isObject( selection ) && !Array.isArray( selection )) {
     var keys = Object.keys( selection );
     for (var j = 0; j < keys.length; ++j) {
       fields[ keys[ j ] ] = selection[ keys[ j ] ];

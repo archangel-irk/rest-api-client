@@ -163,11 +163,11 @@ resourceMixin.get = function( data, ajaxSettings, done ){
   var method = 'GET';
 
   // Если data - есть функция, то это done
-  if ( $.isFunction( data ) ){
+  if ( utils.isFunction( data ) ){
     done = data;
     data = undefined;
   }
-  if ( $.isFunction( ajaxSettings ) ){
+  if ( utils.isFunction( ajaxSettings ) ){
     done = ajaxSettings;
     ajaxSettings = undefined;
   }
@@ -249,11 +249,11 @@ resourceMixin.post = function( data, ajaxSettings, done ){
   var documentIdString;
 
   // Если data - есть функция, то это done
-  if ( $.isFunction( data ) ){
+  if ( utils.isFunction( data ) ){
     done = data;
     data = undefined;
   }
-  if ( $.isFunction( ajaxSettings ) ){
+  if ( utils.isFunction( ajaxSettings ) ){
     done = ajaxSettings;
     ajaxSettings = undefined;
   }
@@ -325,11 +325,11 @@ resourceMixin.put = function( data, ajaxSettings, done ){
   var documentIdString;
 
   // Если data - есть функция, то это done
-  if ( $.isFunction( data ) ){
+  if ( utils.isFunction( data ) ){
     done = data;
     data = undefined;
   }
-  if ( $.isFunction( ajaxSettings ) ){
+  if ( utils.isFunction( ajaxSettings ) ){
     done = ajaxSettings;
     ajaxSettings = undefined;
   }
@@ -402,11 +402,11 @@ resourceMixin.patch = function( data, ajaxSettings, done ){
   var documentIdString;
 
   // Если data - есть функция, то это done
-  if ( $.isFunction( data ) ){
+  if ( utils.isFunction( data ) ){
     done = data;
     data = undefined;
   }
-  if ( $.isFunction( ajaxSettings ) ){
+  if ( utils.isFunction( ajaxSettings ) ){
     done = ajaxSettings;
     ajaxSettings = undefined;
   }
@@ -477,11 +477,11 @@ resourceMixin.delete = function( data, ajaxSettings, done ){
   var method = 'DELETE';
 
   // Если data - есть функция, то это done
-  if ( $.isFunction( data ) ){
+  if ( utils.isFunction( data ) ){
     done = data;
     data = undefined;
   }
-  if ( $.isFunction( ajaxSettings ) ){
+  if ( utils.isFunction( ajaxSettings ) ){
     done = ajaxSettings;
     ajaxSettings = undefined;
   }
@@ -517,7 +517,7 @@ function clearIdentity( resource ){
 }
 
 /**
- * Как бы конструктор ресурса, но возвращает функцию-объект с примесями
+ * Конструктор ресурса, но возвращает функцию со свойствами
  *
  * @param {string} resourceName
  * @param {object} parentResource
@@ -622,6 +622,7 @@ function ApiClient( url, options ){
     headers: {}
   };
 
+  //todo: to utils (deepMerge) добавить возможность расширять объект, а не возвращать новый
   $.extend( true, this, options );
 }
 
@@ -664,7 +665,7 @@ ApiClient.prototype = {
 
     // todo проверть надобность кода
     // Используется для алиасов, в которых второй параметр - есть объект настроек
-    if ( $.isPlainObject( url ) ){
+    if ( utils.isObject( url ) ){
       console.info('Ах@*ть, нужный код!!!!');
       _ajaxSettings = url;
       debugger;
@@ -744,7 +745,7 @@ ApiClient.prototype = {
  */
 ApiClient.prototype.get = function( ajaxSettings, done ){
   console.log( 'api::get' );
-  if ( $.isFunction( ajaxSettings ) ){
+  if ( utils.isFunction( ajaxSettings ) ){
     done = ajaxSettings;
     ajaxSettings = undefined;
   }
