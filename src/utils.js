@@ -257,4 +257,14 @@ utils.clearIdentity = function clearIdentity( resource ){
   }
 };
 
+// Собрать url (без query string)
+utils.constructUrl = function constructUrl( resource ){
+  var identity = resource.identity ? '/' + resource.identity : '/';
+
+  // Пробежаться по всем ресурсам, в том числе в корень апи, чтобы собрать url
+  return resource.parentResource
+    ? constructUrl( resource.parentResource ) + '/' + resource.url + identity
+    : resource.url;
+};
+
 module.exports = utils;

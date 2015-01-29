@@ -65,6 +65,7 @@ var utils = require('./utils');
 var getRequest = require('./get');
 var createPostLikeRequest = require('./post' ).createPostLikeRequest;
 var deleteRequest = require('./delete');
+var Cache = require('./cache');
 
 var resourceMixin = {
   resourceName: 'resource',
@@ -113,25 +114,10 @@ var resourceMixin = {
     return this[ resourceName ];
   },
 
-  // Пробежаться по всем родительским ресурсам и собрать url (без query string)
-  constructUrl: function constructUrl( trailingSlash ){
-    // todo: проверить надобность закомментированного кода
-    // trailingSlash - он иногда нужен, сделать конфиг
-    // условие с recursionCall добавляет слэш в урл перед знаком вопроса
-    //var identity = this.identity ? '/' + this.identity : trailingSlash ? '' : '/';
-    var identity = this.identity ? '/' + this.identity : '';
-
-    // Пробежаться по всем ресурсам и заглянуть в корень апи, чтобы собрать url
-    return this.parentResource
-      ? constructUrl.call( this.parentResource, true ) + '/' + this.url + identity
-      : this.url;
-  },
-
   _resourceRequest: function( method, ajaxSettings, done ){
-    var url = this.constructUrl()
-      , useNotifications = this.notifications;
+    var url = utils.constructUrl( this );
+    var useNotifications = this.notifications;
 
-    console.log( this.resourceName + '::' + method + ' ' + url );
     return this.instance._request( method, url, ajaxSettings.data, ajaxSettings, useNotifications, done );
   }
 };
@@ -235,6 +221,13 @@ function ApiClient( url, options ){
     return new ApiClient( url, options );
   }
 
+  this.defaults = {
+    // Strip slashes by default
+    stripTrailingSlashes: true,
+    // Use cache for GET requests
+    cache: true
+  };
+
   // If first arg is object
   if ( utils.isObject( url ) ){
     options = url;
@@ -267,6 +260,11 @@ function ApiClient( url, options ){
 
   //todo: to utils (deepMerge) добавить возможность расширять объект, а не возвращать новый
   $.extend( true, this, options );
+
+  // Init cache
+  if ( this.defaults.cache ){
+    this.cache = new Cache();
+  }
 }
 
 ApiClient.prototype = {
@@ -292,6 +290,12 @@ ApiClient.prototype = {
     var _ajaxSettings = utils.deepMerge( this.hooks, ajaxSettings );
 
     _ajaxSettings.type = method;
+
+    // strip trailing slashes and set the url (unless this behavior is specifically disabled)
+    if ( this.defaults.stripTrailingSlashes ){
+      url = url.replace(/\/+$/, '') || '/';
+    }
+
     _ajaxSettings.url = url;
 
     // Добавляем авторизацию по токену
@@ -322,12 +326,6 @@ ApiClient.prototype = {
       _ajaxSettings = url;
       debugger;
     }
-
-    // strip trailing slashes and set the url (unless this behavior is specifically disabled)
-    //todo
-    /*if (self.defaults.stripTrailingSlashes) {
-      url = url.replace(/\/+$/, '') || '/';
-    }*/
 
     return _ajaxSettings;
   },
@@ -365,6 +363,8 @@ ApiClient.prototype = {
     if ( useNotifications ){
       cf.notification[ notificationType ].show();
     }
+
+    console.log( method + ' ' + _ajaxSettings.url );
 
     return $.ajax( _ajaxSettings ).fail(function( jqXHR, textStatus, errorThrown ){
       console.warn( jqXHR, textStatus, errorThrown );

@@ -8,8 +8,6 @@
 
 var utils = require('./utils');
 
-var requestsTable = [];
-
 /**
  * GET request
  *
@@ -22,8 +20,8 @@ var requestsTable = [];
  */
 function getRequest( data, ajaxSettings, done ){
   var resource = this;
-  var identity = this.identity;
   var method = 'GET';
+  var key;
 
   // Если data - есть функция, то это done
   if ( utils.isFunction( data ) ){
@@ -38,29 +36,22 @@ function getRequest( data, ajaxSettings, done ){
   ajaxSettings = ajaxSettings || {};
   ajaxSettings.data = data;
 
-  var reqInfo = {
-    method: method,
-    url: this.constructUrl(),
-    ajaxSettings: ajaxSettings,
-    result: null,
-    meta: null
-  };
+  if ( resource.instance.defaults.cache ){
+    ajaxSettings.url = utils.constructUrl( resource );
 
-  //TODO: доделать кэширование
-  var inCache = _.find( requestsTable, reqInfo );
+    key = resource.instance.cache.getKey( ajaxSettings );
+    var req = resource.instance.cache.get( key );
 
-  if ( resource.storage && identity && inCache ){
-    // Если данное есть - вернуть его
-    if ( inCache.result ){
-      done && done( inCache.result, inCache.meta );
+    if ( req ){
+      done && done( req.response, req.textStatus, req.jqXHR );
       utils.clearIdentity( resource );
-      return;
+      return $.Deferred().resolve( req.response, req.textStatus, req.jqXHR );
     }
   }
 
   var dfd = $.Deferred();
   this._resourceRequest( method, ajaxSettings ).done(function( response, textStatus, jqXHR ){
-    var result, fields;
+    var fields;
 
     // #example
     // api.places({ fields: 'name', skip: 100 });
@@ -71,23 +62,23 @@ function getRequest( data, ajaxSettings, done ){
 
     // Есть ответ надо сохранить в хранилище
     if ( resource.storage && !ajaxSettings.doNotStore ){
-      // Не добавлять в хранилище результат запросов с выборкой полей
-      if ( fields ){
-        result = response.result;
+      if ( response.result ){
+        response.result = storage[ resource.collectionName ].add( response.result || response, fields, true );
       } else {
-        result = storage[ resource.collectionName ].add( response.result || response, fields, true );
+        response = storage[ resource.collectionName ].add( response.result || response, fields, true );
       }
-    } else {
-      result = response.result || response;
     }
 
-    // Сохранить ответ от сервера для кэширования
-    reqInfo.result = result;
-    reqInfo.meta = response.meta;
-    requestsTable.push( reqInfo );
+    if ( resource.instance.defaults.cache ){
+      resource.instance.cache.put( key, {
+        response: response,
+        textStatus: textStatus,
+        jqXHR: jqXHR
+      });
+    }
 
-    done && done( result, response.meta );
-    dfd.resolve( result, response.meta, textStatus, jqXHR );
+    done && done( response, textStatus, jqXHR );
+    dfd.resolve( response, textStatus, jqXHR );
 
   }).fail(function( jqXHR, textStatus, errorThrown ){
     dfd.reject( jqXHR, textStatus, errorThrown );
