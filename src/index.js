@@ -262,16 +262,16 @@ resourceMixin.post = function( data, ajaxSettings, done ){
 
   // При сохранении документа нужно сохранять только изменённые поля
   // Иногда передают документ
-  if ( data instanceof storage.Document ) {
+  if ( resource.storage && data instanceof storage.Document ) {
     documentIdString = data._id.toString();
     data = data.$__delta();
 
   // Так можно понять, что мы сохраняем сущетвующий на сервере Document
-  } else if ( storage.ObjectId.isValid( identity ) ) {
+  } else if ( resource.storage && storage.ObjectId.isValid( identity ) ) {
     documentIdString = identity;
 
   // При сохранении через метод save() у документа
-  } else if ( data._id && storage.ObjectId.isValid( data._id ) ) {
+  } else if ( resource.storage && data._id && storage.ObjectId.isValid( data._id ) ) {
     documentIdString = data._id.toString();
   }
 
@@ -338,16 +338,16 @@ resourceMixin.put = function( data, ajaxSettings, done ){
 
   // При сохранении документа нужно сохранять только изменённые поля
   // Иногда передают документ
-  if ( data instanceof storage.Document ) {
+  if ( resource.storage && data instanceof storage.Document ) {
     documentIdString = data._id.toString();
     data = data.$__delta();
 
     // Так можно понять, что мы сохраняем сущетвующий на сервере Document
-  } else if ( storage.ObjectId.isValid( identity ) ) {
+  } else if ( resource.storage && storage.ObjectId.isValid( identity ) ) {
     documentIdString = identity;
 
     // При сохранении через метод save() у документа
-  } else if ( data._id && storage.ObjectId.isValid( data._id ) ) {
+  } else if ( resource.storage && data._id && storage.ObjectId.isValid( data._id ) ) {
     documentIdString = data._id.toString();
   }
 
@@ -415,16 +415,16 @@ resourceMixin.patch = function( data, ajaxSettings, done ){
 
   // При сохранении документа нужно сохранять только изменённые поля
   // Иногда передают документ
-  if ( data instanceof storage.Document ) {
+  if ( resource.storage && data instanceof storage.Document ) {
     documentIdString = data._id.toString();
     data = data.$__delta();
 
     // Так можно понять, что мы сохраняем сущетвующий на сервере Document
-  } else if ( storage.ObjectId.isValid( identity ) ) {
+  } else if ( resource.storage && storage.ObjectId.isValid( identity ) ) {
     documentIdString = identity;
 
     // При сохранении через метод save() у документа
-  } else if ( data._id && storage.ObjectId.isValid( data._id ) ) {
+  } else if ( resource.storage && data._id && storage.ObjectId.isValid( data._id ) ) {
     documentIdString = data._id.toString();
   }
 
@@ -640,10 +640,9 @@ ApiClient.prototype = {
   methodsMap: methodsMap,
 
   _prepareAjaxSettings: function( method, url, data, ajaxSettings ){
-    var type = this.methodsMap[ method ];
     var _ajaxSettings = utils.deepMerge( this.hooks, ajaxSettings );
 
-    _ajaxSettings.type = type;
+    _ajaxSettings.type = method;
     _ajaxSettings.url = url;
 
     // Добавляем авторизацию по токену
@@ -651,7 +650,7 @@ ApiClient.prototype = {
       _ajaxSettings.headers.Authorization = 'token ' + this.token;
     }
 
-    if ( type === 'GET' ){
+    if ( method === 'GET' ){
       _ajaxSettings.data = utils.deepMerge( _ajaxSettings.data, data );
     } else {
       // Если сохраняем документ, нужно сделать toObject({depopulate: 1})
@@ -696,10 +695,9 @@ ApiClient.prototype = {
       throw new Error('Параметр `method` должен быть строкой, а не ', method );
     }
 
-    var self = this
-      , type = this.methodsMap[ method ]
-      , notificationType = type === 'GET' ? 'load' : ( type === 'POST' || type === 'PUT' || type === 'PATCH' ) ? 'save' : 'delete'
-      , _ajaxSettings = this._prepareAjaxSettings( method, url, data, ajaxSettings );
+    var self = this;
+    var notificationType = method === 'GET' ? 'load' : ( method === 'POST' || method === 'PUT' || method === 'PATCH' ) ? 'save' : 'delete';
+    var _ajaxSettings = this._prepareAjaxSettings( method, url, data, ajaxSettings );
 
     // Использовать значение по умолчанию, если useNotifications не задан
     // тут же порверяем, подключены ли уведомления
