@@ -24,14 +24,16 @@ var allowCrossDomain = function(req, res, next) {
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
 
   // intercept OPTIONS method
-  if ('OPTIONS' == req.method) return res.send(200);
+  if ('OPTIONS' == req.method) return res.sendStatus(200);
 
   next();
 };
 app.use( allowCrossDomain );
 
-// parse application/json
+// for parsing application/json
 app.use( bodyParser.json() );
+// for parsing application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: true }));
 
 
 
@@ -41,6 +43,11 @@ app.get('/', function( req, res ){
 
 app.get('/users', function( req, res ){
   res.json([{ user: 'tobi' },{ user: 'loki' }]);
+});
+
+app.post('/users', function( req, res ){
+  console.log( req.body );
+  res.json( req.body );
 });
 
 var server = app.listen( app.get('port'), function(){
