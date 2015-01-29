@@ -299,7 +299,7 @@ describe('ApiClient', function(){
 
 
   describe('POST', function(){
-    it('base', function( done ){
+    it('users', function( done ){
       var api = new ApiClient('http://0.0.0.0:3000');
 
       api.add('users');
