@@ -135,20 +135,8 @@ var resourceMixin = {
 
 var requestsTable = [];
 
-var methodsMap = {
-  'create': 'POST',
-  'read':   'GET',
-  'update': 'PUT',
-  'delete': 'DELETE',
-  'patch':  'PATCH',
-
-  'post':   'POST',
-  'get':    'GET',
-  'save':   'PUT'
-};
-
 /**
- * Запросы create read update delete patch get post
+ * GET request
  *
  * В ajaxSettings можно указать поле doNotStore - чтобы не сохранять полученный объект в storage
  *
@@ -184,17 +172,14 @@ resourceMixin.get = function( data, ajaxSettings, done ){
   };
 
   //TODO: доделать кэширование
-  // Кэширование на чтение
-  if ( method === 'GET' ){
-    var inCache = _.find( requestsTable, reqInfo );
+  var inCache = _.find( requestsTable, reqInfo );
 
-    if ( resource.storage && identity && inCache ){
-      // Если данное есть - вернуть его
-      if ( inCache.result ){
-        done && done( inCache.result, inCache.meta );
-        clearIdentity( resource );
-        return;
-      }
+  if ( resource.storage && identity && inCache ){
+    // Если данное есть - вернуть его
+    if ( inCache.result ){
+      done && done( inCache.result, inCache.meta );
+      clearIdentity( resource );
+      return;
     }
   }
 
@@ -221,7 +206,7 @@ resourceMixin.get = function( data, ajaxSettings, done ){
       result = response.result || response;
     }
 
-    // Сохранить параметры запроса и ответ для кэширования
+    // Сохранить ответ от сервера для кэширования
     reqInfo.result = result;
     reqInfo.meta = response.meta;
     requestsTable.push( reqInfo );
@@ -242,6 +227,7 @@ resourceMixin.get = function( data, ajaxSettings, done ){
 };
 resourceMixin.read = resourceMixin.get;
 
+//todo: методы POST|PUT|PATCH вроде одинаковые
 resourceMixin.post = function( data, ajaxSettings, done ){
   var resource = this;
   var identity = this.identity;
@@ -637,7 +623,17 @@ ApiClient.prototype = {
    */
   add: resourceMixin.add,
 
-  methodsMap: methodsMap,
+  _methods: {
+    'create': 'POST',
+    'read':   'GET',
+    'update': 'PUT',
+    'delete': 'DELETE',
+    'patch':  'PATCH',
+
+    'post':   'POST',
+    'get':    'GET',
+    'save':   'PUT'
+  },
 
   _prepareAjaxSettings: function( method, url, data, ajaxSettings ){
     var _ajaxSettings = utils.deepMerge( this.hooks, ajaxSettings );
@@ -673,6 +669,12 @@ ApiClient.prototype = {
       _ajaxSettings = url;
       debugger;
     }
+
+    // strip trailing slashes and set the url (unless this behavior is specifically disabled)
+    //todo
+    /*if (self.defaults.stripTrailingSlashes) {
+      url = url.replace(/\/+$/, '') || '/';
+    }*/
 
     return _ajaxSettings;
   },
