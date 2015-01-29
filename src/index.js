@@ -754,7 +754,7 @@ ApiClient.prototype.get = function( ajaxSettings, done ){
 
   ajaxSettings = ajaxSettings || {};
 
-  return this._request('read', this.url, undefined, ajaxSettings, false, done );
+  return this._request('GET', this.url, undefined, ajaxSettings, false, done );
 };
 /**
  * @alias ApiClient.prototype.get
