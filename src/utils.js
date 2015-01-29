@@ -249,4 +249,12 @@ utils.select = function select( selection ){
   throw new TypeError('Invalid select() argument. Must be string or object.');
 };
 
+// Очистить identity у ресурса и его родительских ресурсов тоже
+utils.clearIdentity = function clearIdentity( resource ){
+  while ( resource.parentResource ) {
+    resource.identity = '';
+    resource = resource.parentResource;
+  }
+};
+
 module.exports = utils;
