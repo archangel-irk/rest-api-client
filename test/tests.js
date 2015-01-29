@@ -314,19 +314,27 @@ describe('ApiClient', function(){
       });
     });
   });
+
+  describe('cache', function(){
+    it('works', function( done ){
+      var api = new ApiClient('http://0.0.0.0:3000');
+
+      api.add('users');
+
+      api.users.get().done(function( response ){
+        assert.deepEqual( response, [{ user: 'tobi' },{ user: 'loki' }]);
+
+        api.users.get().done(function( response ){
+          var resArr = [{ user: 'tobi' },{ user: 'loki' }];
+          resArr.__cached = true;
+
+          assert.deepEqual( response, resArr );
+
+          done();
+        });
+      });
+    });
+  });
 });
 
 })();
-
-// Надо подумать, как лучше организовать тестирование
-// Вот список вкладок, которые могут понадобиться
-// http://qunitjs.com/cookbook/#asynchronous-callbacks
-// https://github.com/cjohansen/Sinon.JS
-// https://github.com/WP-API/client-js/blob/gh-pages/tests%2Ftests-post.js
-// http://www.wenda.io/questions/2580277/sinon-js-1-10-jquery-2-1-and-synchronous-request.html
-// http://stackoverflow.com/questions/24961056/sinon-js-1-10-jquery-2-1-and-synchronous-request
-// http://jsfiddle.net/kHFf5/
-// http://unitjs.com/guide/sinon-js.html
-// http://taylor.fausak.me/2013/02/17/testing-a-node-js-http-server-with-mocha/
-// https://github.com/narirou/gulp-develop-server
-// http://expressjs.com/starter/basic-routing.html
