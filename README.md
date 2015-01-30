@@ -6,8 +6,7 @@
 Авторизация доступна по токену.
 
 ## Dependencies
-1. lodash
-2. jQuery ajax
+1. jQuery for ajax.
 
 ## Basic usage
 ```javascript
