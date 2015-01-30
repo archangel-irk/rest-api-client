@@ -44,33 +44,33 @@ function postLikeRequest( method, data, ajaxSettings, done ){
 
   var dfd = $.Deferred();
   this._resourceRequest( method, ajaxSettings ).done(function( response, textStatus, jqXHR ){
-    var result;
+    var doc;
 
     // Есть ответ надо сохранить в хранилище
     if ( resource.storage && !ajaxSettings.doNotStore ){
       // При сохранении нужно обновлять документ
       // Попробуем сначала найти документ по id и обновить его
-      result = storage[ resource.collectionName ].findById( documentIdString );
+      doc = storage[ resource.collectionName ].findById( documentIdString );
 
-      if ( result ){
+      if ( doc ){
         // Обновляем документ
-        result.set( response.result );
+        doc.set( response );
 
         // Создаём ссылку по новому id в коллекции
-        storage[ resource.collectionName ].updateIdLink( result );
+        storage[ resource.collectionName ].updateIdLink( doc );
 
         // Этот документ теперь сохранён на сервере, значит он уже не новый.
-        result.isNew = false;
+        doc.isNew = false;
+
+        response = doc;
 
       } else {
-        result = storage[ resource.collectionName ].add( response.result || response, undefined, true );
+        response = storage[ resource.collectionName ].add( response, undefined, true );
       }
-    } else {
-      result = response.result || response;
     }
 
-    done && done( result, response.meta );
-    dfd.resolve( result, response.meta, textStatus, jqXHR );
+    done && done( response, textStatus, jqXHR );
+    dfd.resolve( response, textStatus, jqXHR );
 
   }).fail(function( jqXHR, textStatus, errorThrown ){
     dfd.reject( jqXHR, textStatus, errorThrown );

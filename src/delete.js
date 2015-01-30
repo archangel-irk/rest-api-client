@@ -27,12 +27,8 @@ function deleteRequest( data, ajaxSettings, done ){
 
   var dfd = $.Deferred();
   this._resourceRequest( method, ajaxSettings ).done(function( response, textStatus, jqXHR ){
-    var result;
-
-    result = response.result || response;
-
-    done && done( result, response.meta );
-    dfd.resolve( result, response.meta, textStatus, jqXHR );
+    done && done( response, textStatus, jqXHR );
+    dfd.resolve( response, textStatus, jqXHR );
 
   }).fail(function( jqXHR, textStatus, errorThrown ){
     dfd.reject( jqXHR, textStatus, errorThrown );

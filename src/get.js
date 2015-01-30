@@ -62,11 +62,7 @@ function getRequest( data, ajaxSettings, done ){
 
     // Есть ответ надо сохранить в хранилище
     if ( resource.storage && !ajaxSettings.doNotStore ){
-      if ( response.result ){
-        response.result = storage[ resource.collectionName ].add( response.result || response, fields, true );
-      } else {
-        response = storage[ resource.collectionName ].add( response.result || response, fields, true );
-      }
+      response = storage[ resource.collectionName ].add( response, fields, true );
     }
 
     if ( resource.instance.defaults.cache ){
