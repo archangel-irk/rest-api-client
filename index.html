@@ -12,7 +12,7 @@
         hooks: {
             headers: {
                 Accept: 'application/vnd.github.v3+json',
-                Authorization: 'token 8fbfc540f1ed1417083c70a990b4db3c9aa86efe'
+                Authorization: 'token e31ba2b2c80dfec76606d3a636e722fe4db0e64c'
             }
         },
         unauthorizedCallback: function(){} // Вызывается всякий раз, когда код ответа от сервера 401
@@ -28,6 +28,20 @@
     github.user.read();                                              // GET /user
     github.users('archangel-irk').repos.read();                      // GET /users/archangel-irk/repos
     github.users('archangel-irk').repos.read({ sort: 'pushed' });    // GET /users/archangel-irk/repos?sort=pushed
+
+
+    var api = new ApiClient('http://0.0.0.0:3000');
+    api.add('users');
+    api.users.post({
+        username: 'login',
+        password: 'password'
+    }).done(function(){
+        console.log( arguments );
+    });
+
+    api.users.get().done(function(){
+        console.log( arguments );
+    });
 </script>
 </body>
 </html>
