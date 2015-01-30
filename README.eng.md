@@ -6,8 +6,7 @@ The library uses the approach of "chaining" for the organization transparent que
 Authorization is available on the token.  
 
 ## Dependencies
-1. lodash
-2. jQuery for ajax
+1. jQuery for ajax.
 
 ## Basic usage
 ```javascript
