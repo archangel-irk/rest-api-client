@@ -5,7 +5,6 @@ module.exports = function (config) {
     // list of files / patterns to load in the browser
     files: [
       'vendor/jquery-2.1.3.js',
-      'vendor/lodash.js',
       'dist/api-client.js',
       'test/*.js'
     ],
