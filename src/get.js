@@ -36,11 +36,11 @@ function getRequest( data, ajaxSettings, done ){
   ajaxSettings = ajaxSettings || {};
   ajaxSettings.data = data;
 
-  if ( resource.instance.defaults.cache ){
+  if ( resource.apiRoot.defaults.cache ){
     ajaxSettings.url = utils.constructUrl( resource );
 
-    key = resource.instance.cache.getKey( ajaxSettings );
-    var req = resource.instance.cache.get( key );
+    key = resource.apiRoot.cache.getKey( ajaxSettings );
+    var req = resource.apiRoot.cache.get( key );
 
     if ( req ){
       done && done( req.response, req.textStatus, req.jqXHR );
@@ -65,8 +65,8 @@ function getRequest( data, ajaxSettings, done ){
       response = storage[ resource.collectionName ].add( response, fields, true );
     }
 
-    if ( resource.instance.defaults.cache ){
-      resource.instance.cache.put( key, {
+    if ( resource.apiRoot.defaults.cache ){
+      resource.apiRoot.cache.put( key, {
         response: response,
         textStatus: textStatus,
         jqXHR: jqXHR

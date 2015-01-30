@@ -118,7 +118,7 @@ var resourceMixin = {
     var url = utils.constructUrl( this );
     var useNotifications = this.notifications;
 
-    return this.instance._request( method, url, ajaxSettings.data, ajaxSettings, useNotifications, done );
+    return this.apiRoot._request( method, url, ajaxSettings.data, ajaxSettings, useNotifications, done );
   }
 };
 
@@ -179,7 +179,7 @@ function Resource( resourceName, parentResource, usersMixin ){
   }, usersMixin );
 
   resource.parentResource = parentResource;
-  resource.instance = parentResource.instance || parentResource;
+  resource.apiRoot = parentResource.apiRoot || parentResource;
 
   return resource;
 }
