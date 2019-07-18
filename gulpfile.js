@@ -6,48 +6,50 @@
  */
 'use strict';
 
-var gulp = require('gulp');
-var browserify = require('gulp-browserify');
-var rename = require('gulp-rename');
-var uglify = require('gulp-uglify');
-var server = require('gulp-develop-server');
-var karma = require('karma').server;
+const { series, src, dest } = require('gulp');
+const browserify = require('gulp-browserify');
+const rename = require('gulp-rename');
+const uglify = require('gulp-uglify');
+const gulpDevelopServer = require('gulp-develop-server');
+const karma = require('karma').server;
 
-gulp.task('build:debug', function() {
-  gulp.src('src/index.js')
-    .pipe( browserify({
+
+function build() {
+  return src('src/index.js')
+    .pipe(browserify({
       standalone: 'ApiClient',
-      debug: true
-    }) )
-    .pipe( rename('api-client.js') )
-    .pipe( gulp.dest('dist') );
-});
+    }))
+    .pipe(uglify())
+    .pipe(rename('api-client.min.js'))
+    .pipe(dest('dist'));
+}
 
-gulp.task('build', function() {
-  gulp.src('src/index.js')
-    .pipe( browserify({
-      standalone: 'ApiClient'
-    }) )
-    .pipe( uglify() )
-    .pipe( rename('api-client.min.js') )
-    .pipe( gulp.dest('dist') );
-});
+function buildDebug() {
+  return src('src/index.js')
+    .pipe(browserify({
+      standalone: 'ApiClient',
+      debug: true,
+    }))
+    .pipe(rename('api-client.js'))
+    .pipe(dest('dist'));
+}
 
-gulp.task('server', function( done ) {
-  server.listen({
-    path: 'test/server/server.js'
-  }, function( err ){
-    done();
+function server(cb) {
+  return gulpDevelopServer.listen({
+    path: 'test/server/server.js',
+  }, function(err) {
+    cb();
   });
-});
+}
 
-gulp.task('test', ['server'], function (done) {
-  karma.start({
-    configFile: __dirname + '/karma.conf.js'
-  }, function(){
-    server.kill();
-    done();
+function test(cb) {
+  return karma.start({
+    configFile: __dirname + '/karma.conf.js',
+  }, function() {
+    gulpDevelopServer.kill();
+    cb();
   });
-});
+}
 
-gulp.task('default', ['build', 'build:debug']);
+exports.test = series(server, test);
+exports.default = series(build, buildDebug);
