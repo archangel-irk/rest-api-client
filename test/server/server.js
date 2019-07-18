@@ -28,29 +28,27 @@ var allowCrossDomain = function(req, res, next) {
 
   next();
 };
-app.use( allowCrossDomain );
+app.use(allowCrossDomain);
 
 // for parsing application/json
-app.use( bodyParser.json() );
+app.use(bodyParser.json());
 // for parsing application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 
-
-
-app.get('/', function( req, res ){
+app.get('/', function(req, res) {
   res.json({ user: 'tobi' });
 });
 
-app.get('/users', function( req, res ){
-  res.json([{ user: 'tobi' },{ user: 'loki' }]);
+app.get('/users', function(req, res) {
+  res.json([{ user: 'tobi' }, { user: 'loki' }]);
 });
 
-app.post('/users', function( req, res ){
-  console.log( req.body );
-  res.json( req.body );
+app.post('/users', function(req, res) {
+  console.log(req.body);
+  res.json(req.body);
 });
 
-var server = app.listen( app.get('port'), function(){
+var server = app.listen(app.get('port'), function() {
 
   var host = server.address().address;
   var port = server.address().port;
