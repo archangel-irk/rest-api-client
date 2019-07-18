@@ -11,7 +11,7 @@ const browserify = require('gulp-browserify');
 const rename = require('gulp-rename');
 const uglify = require('gulp-uglify');
 const gulpDevelopServer = require('gulp-develop-server');
-const karma = require('karma').server;
+const karmaServer = require('karma').Server;
 
 
 function build() {
@@ -43,12 +43,12 @@ function server(cb) {
 }
 
 function test(cb) {
-  return karma.start({
+  return new karmaServer({
     configFile: __dirname + '/karma.conf.js',
   }, function() {
     gulpDevelopServer.kill();
     cb();
-  });
+  }).start();
 }
 
 exports.test = series(server, test);
