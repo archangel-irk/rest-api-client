@@ -8,19 +8,21 @@
     "url": "https://github.com/archangel-irk/rest-api-client.git"
   },
   "devDependencies": {
-    "promise": "8.0.3",
+    "body-parser": "1.19.0",
+    "chai": "4.2.0",
+    "express": "4.17.1",
     "gulp": "4.0.2",
+    "gulp-browserify": "0.5.1",
+    "gulp-develop-server": "0.5.2",
     "gulp-rename": "1.4.0",
     "gulp-uglify": "3.0.2",
-    "gulp-browserify": "0.5.1",
-    "express": "4.17.1",
-    "body-parser": "1.19.0",
-    "gulp-develop-server": "0.5.2",
     "karma": "4.2.0",
+    "karma-chai": "0.1.0",
+    "karma-chrome-launcher": "3.0.0",
     "karma-coverage": "1.1.2",
     "karma-mocha": "1.3.0",
-    "karma-chai": "0.1.0",
-    "karma-chrome-launcher": "3.0.0"
+    "mocha": "6.1.4",
+    "promise": "8.0.3"
   },
   "license": "MIT"
 }
