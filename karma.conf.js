@@ -6,7 +6,8 @@ module.exports = function(config) {
     files: [
       'vendor/jquery-2.1.3.js',
       'dist/api-client.umd.production.min.js',
-      'test/tests.js',
+      'test/utils.test.js',
+      'test/api-client.test.js',
     ],
 
     // frameworks to use
