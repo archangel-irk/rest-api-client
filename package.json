@@ -1,7 +1,7 @@
 {
   "name": "rest-api-client",
   "version": "0.3.0",
-  "description": "RESTfull api client",
+  "description": "RESTful api client",
   "author": "Constantine Melnikov <ka.melnikov@gmail.com>",
   "repository": {
     "type": "git",

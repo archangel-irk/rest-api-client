@@ -1,4 +1,4 @@
-# RESTfull api client
+# RESTful api client
 [english](README.eng.md) | [по-русски](README.md)
 
 Постройте удобный клиент к серверному api.
