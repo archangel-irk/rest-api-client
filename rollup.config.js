@@ -1,6 +1,10 @@
 import filesize from 'rollup-plugin-filesize';
 import {terser} from 'rollup-plugin-terser';
 
+
+// https://github.com/Polymer/lit-html/blob/master/rollup.config.js
+// https://github.com/mobxjs/mobx/blob/master/scripts/build.js
+
 export default {
   input: 'src/index.js',
   output: {
