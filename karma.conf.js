@@ -5,9 +5,8 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'vendor/jquery-2.1.3.js',
-      { pattern: 'dist2/api-client.js', type: 'module', included: false },
-      // 'dist2/api-client.js',
-      { pattern: 'test/tests.js', type: 'module' },
+      'dist2/api-client.js',
+      'test/tests.js',
     ],
 
     // frameworks to use
