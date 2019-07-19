@@ -4,9 +4,7 @@
  * Date: 27.01.15
  * Time: 16:16
  */
-'use strict';
-
-var utils = {};
+export const utils = {};
 
 /** `Object#toString` result references. */
 var argsTag = '[object Arguments]',
@@ -266,5 +264,3 @@ utils.constructUrl = function constructUrl( resource ){
     ? constructUrl( resource.parentResource ) + '/' + resource.url + identity
     : resource.url;
 };
-
-module.exports = utils;

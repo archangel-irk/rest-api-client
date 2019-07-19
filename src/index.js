@@ -59,13 +59,11 @@
 
  */
 
-'use strict';
-
-var utils = require('./utils');
-var getRequest = require('./get');
-var createPostLikeRequest = require('./post' ).createPostLikeRequest;
-var deleteRequest = require('./delete');
-var Cache = require('./cache');
+import { utils } from './utils.js';
+import { getRequest } from './get.js';
+import { createPostLikeRequest } from './post.js';
+import { deleteRequest } from './delete.js';
+import { Cache } from './cache.js';
 
 var resourceMixin = {
   resourceName: 'resource',
@@ -421,5 +419,4 @@ ApiClient.version = '0.3.0';
 
 ApiClient.utils = utils;
 
-// exports
-module.exports = ApiClient;
+export { ApiClient };

@@ -4,11 +4,9 @@
  * Date: 29.01.15
  * Time: 15:22
  */
-'use strict';
+import { utils } from './utils.js';
 
-var utils = require('./utils');
-
-function deleteRequest( data, ajaxSettings, done ){
+export function deleteRequest( data, ajaxSettings, done ){
   var resource = this;
   var method = 'DELETE';
 
@@ -39,5 +37,3 @@ function deleteRequest( data, ajaxSettings, done ){
 
   return dfd;
 }
-
-module.exports = deleteRequest;

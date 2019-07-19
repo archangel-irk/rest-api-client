@@ -4,9 +4,7 @@
  * Date: 29.01.15
  * Time: 15:12
  */
-'use strict';
-
-var utils = require('./utils');
+import { utils } from './utils.js';
 
 /**
  * GET request
@@ -18,7 +16,7 @@ var utils = require('./utils');
  * @param [done]
  * @returns {*}
  */
-function getRequest( data, ajaxSettings, done ){
+export function getRequest( data, ajaxSettings, done ){
   var resource = this;
   var method = 'GET';
   var key;
@@ -87,5 +85,3 @@ function getRequest( data, ajaxSettings, done ){
 
   return dfd;
 }
-
-module.exports = getRequest;

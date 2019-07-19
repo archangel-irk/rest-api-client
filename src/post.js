@@ -4,9 +4,8 @@
  * Date: 29.01.15
  * Time: 15:18
  */
-'use strict';
+import { utils } from './utils.js';
 
-var utils = require('./utils');
 
 function postLikeRequest( method, data, ajaxSettings, done ){
   var resource = this;
@@ -83,13 +82,10 @@ function postLikeRequest( method, data, ajaxSettings, done ){
 }
 
 // Partial Application
-function createPostLikeRequest( method ){
+export function createPostLikeRequest( method ){
   return function(){
     var args = Array.prototype.slice.call( arguments );
 
     return postLikeRequest.apply( this, [ method ].concat( args ) );
   };
 }
-
-exports.postLikeRequest = postLikeRequest;
-exports.createPostLikeRequest = createPostLikeRequest;

@@ -4,11 +4,9 @@
  * Date: 29.01.15
  * Time: 19:37
  */
-'use strict';
+import { utils } from './utils.js';
 
-var utils = require('./utils');
-
-function Cache(){
+export function Cache(){
   this.data = {};
 }
 
@@ -50,5 +48,3 @@ Cache.prototype.get = function( key ){
 Cache.prototype.clear = function(  ){
   this.data = {};
 };
-
-module.exports = Cache;
