@@ -7,9 +7,9 @@
     "type": "git",
     "url": "https://github.com/archangel-irk/rest-api-client.git"
   },
-  "main": "dist2/api-client.cjs.production.min.js",
-  "module": "dist2/api-client.esm.production.min.js",
-  "browser": "dist2/api-client.umd.production.min.js",
+  "main": "dist/api-client.cjs.production.min.js",
+  "module": "dist/api-client.esm.production.min.js",
+  "browser": "dist/api-client.umd.production.min.js",
   "scripts": {
     "build": "rollup -c"
   },
