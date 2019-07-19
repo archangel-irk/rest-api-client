@@ -1,9 +1,3 @@
-/**
- * User: Constantine Melnikov
- * Email: ka.melnikov@gmail.com
- * Date: 27.01.15
- * Time: 16:16
- */
 export const utils = {};
 
 /** `Object#toString` result references. */

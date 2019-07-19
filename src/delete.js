@@ -1,9 +1,3 @@
-/**
- * User: Constantine Melnikov
- * Email: ka.melnikov@gmail.com
- * Date: 29.01.15
- * Time: 15:22
- */
 import { utils } from './utils.js';
 
 export function deleteRequest( data, ajaxSettings, done ){
