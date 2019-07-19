@@ -1,47 +1,46 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script src="vendor/jquery-2.1.3.js"></script>
-    <script src="dist/api-client.js"></script>
+  <script src="vendor/jquery-2.1.3.js"></script>
+  <script src="dist/api-client.js"></script>
 
-    <title>RESTful api client</title>
+  <title>RESTful api client</title>
 </head>
 <body>
 <script>
-    var github = ApiClient('https://api.github.com', {
-        hooks: {
-            headers: {
-                Accept: 'application/vnd.github.v3+json',
-                Authorization: 'token e31ba2b2c80dfec76606d3a636e722fe4db0e64c'
-            }
-        },
-        unauthorizedCallback: function(){} // Вызывается всякий раз, когда код ответа от сервера 401
-    });
+  var github = ApiClient('https://api.github.com', {
+    hooks: {
+      headers: {
+        Accept: 'application/vnd.github.v3+json',
+        Authorization: 'token e31ba2b2c80dfec76606d3a636e722fe4db0e64c',
+      },
+    },
+    unauthorizedCallback: function() {
+    }, // Вызывается всякий раз, когда код ответа от сервера 401
+  });
 
-    //github.read();               // GET https://api.github.com
+  //github.read();               // GET https://api.github.com
 
-    github.add('user');          // /user
-    github.add('users');         // /users
-    github.users.add('repos');   // /users/repos
+  github.add('user');          // /user
+  github.add('users');         // /users
+  github.users.add('repos');   // /users/repos
 
+  github.user.read();                                              // GET /user
+  github.users('archangel-irk').repos.read();                      // GET /users/archangel-irk/repos
+  github.users('archangel-irk').repos.read({ sort: 'pushed' });    // GET /users/archangel-irk/repos?sort=pushed
 
-    github.user.read();                                              // GET /user
-    github.users('archangel-irk').repos.read();                      // GET /users/archangel-irk/repos
-    github.users('archangel-irk').repos.read({ sort: 'pushed' });    // GET /users/archangel-irk/repos?sort=pushed
+  var api = new ApiClient('http://0.0.0.0:3000');
+  api.add('users');
+  api.users.post({
+    username: 'login',
+    password: 'password',
+  }).done(function() {
+    console.log(arguments);
+  });
 
-
-    var api = new ApiClient('http://0.0.0.0:3000');
-    api.add('users');
-    api.users.post({
-        username: 'login',
-        password: 'password'
-    }).done(function(){
-        console.log( arguments );
-    });
-
-    api.users.get().done(function(){
-        console.log( arguments );
-    });
+  api.users.get().done(function() {
+    console.log(arguments);
+  });
 </script>
 </body>
 </html>
