@@ -5,21 +5,23 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'vendor/jquery-2.1.3.js',
-      'dist/api-client.js',
-      'test/*.js',
+      { pattern: 'dist2/api-client.js', type: 'module', included: false },
+      // 'dist2/api-client.js',
+      { pattern: 'test/tests.js', type: 'module' },
     ],
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
     frameworks: [
       'mocha',
-      'chai'
+      'chai',
     ],
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
     browsers: [
       'Chrome',
+      // 'ChromeHeadless',
     ],
 
     // test results reporter to use
@@ -34,7 +36,7 @@ module.exports = function(config) {
       // source files, that you wanna generate coverage for
       // do not include tests or libraries
       // (these files will be instrumented by Istanbul)
-      'dist/api-client.js': ['coverage'],
+      'dist2/api-client.js': ['coverage'],
     },
 
     // optionally, configure the reporter
@@ -48,7 +50,7 @@ module.exports = function(config) {
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
-    singleRun: true,
+    singleRun: false,
 
     // level of logging
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
