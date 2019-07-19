@@ -4,9 +4,6 @@
  * Date: 22.01.15
  * Time: 17:30
  */
-import { ApiClient } from '../dist2/api-client.js';
-
-console.log('sdfsdfsdfsdf');
 
 (function(){
 'use strict';

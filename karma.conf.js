@@ -5,7 +5,7 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'vendor/jquery-2.1.3.js',
-      'dist2/api-client.js',
+      'dist/api-client.umd.production.min.js',
       'test/tests.js',
     ],
 
@@ -35,7 +35,7 @@ module.exports = function(config) {
       // source files, that you wanna generate coverage for
       // do not include tests or libraries
       // (these files will be instrumented by Istanbul)
-      'dist2/api-client.js': ['coverage'],
+      'dist/api-client.umd.production.min.js': ['coverage'],
     },
 
     // optionally, configure the reporter
