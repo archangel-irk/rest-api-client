@@ -4,6 +4,10 @@
  * Date: 22.01.15
  * Time: 17:30
  */
+import { ApiClient } from '../dist2/api-client.js';
+
+console.log('sdfsdfsdfsdf');
+
 (function(){
 'use strict';
 
@@ -12,6 +16,8 @@ describe('utils', function(){
     it('add keys in target that do not exist at the root', function(){
       var src = {key1: 'value1', key2: 'value2'};
       var target = {};
+
+      console.log(ApiClient);
 
       var res = ApiClient.utils.deepMerge( target, src );
 
