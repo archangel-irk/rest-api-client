@@ -1,3 +1,4 @@
+// Babel used only for babel-eslint.
 const presets = [
   [
     '@babel/env',
