@@ -57,7 +57,7 @@ function generateBundleConfig(outputFile, format, mode) {
       banner,
       name: format === Format.UMD ? name : undefined,
       exports: 'named',
-      sourcemap: Mode.DEVELOPMENT ? 'inline' : undefined,
+      sourcemap: mode === Mode.DEVELOPMENT ? 'inline' : undefined,
     },
     plugins,
   };
