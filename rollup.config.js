@@ -5,6 +5,7 @@ import pkg from './package.json';
 
 
 // Config examples
+// https://habr.com/en/post/440946/
 // https://github.com/Polymer/lit-html/blob/master/rollup.config.js
 // https://github.com/mobxjs/mobx/blob/master/scripts/build.js
 // https://github.com/rollup/rollupjs.org/blob/master/rollup.config.js
