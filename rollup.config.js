@@ -64,9 +64,8 @@ function generateBundleConfig(outputFile, format, mode) {
 }
 
 export default [
-  generateBundleConfig(path.join('dist', 'api-client.esm.development.js'), Format.ESModule, Mode.DEVELOPMENT),
-  generateBundleConfig(path.join('dist', 'api-client.esm.production.min.js'), Format.ESModule, Mode.PRODUCTION),
+  generateBundleConfig(path.join('dist', 'api-client.development.js'), Format.ESModule, Mode.DEVELOPMENT),
+  generateBundleConfig(path.join('dist', 'api-client.production.min.js'), Format.ESModule, Mode.PRODUCTION),
 
-  generateBundleConfig(path.join('dist', 'api-client.umd.development.js'), Format.UMD, Mode.DEVELOPMENT),
-  generateBundleConfig(path.join('dist', 'api-client.umd.production.min.js'), Format.UMD, Mode.PRODUCTION),
+  generateBundleConfig(path.join('dist', 'api-client.testing.js'), Format.UMD, Mode.DEVELOPMENT),
 ];
