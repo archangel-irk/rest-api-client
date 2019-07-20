@@ -11,3 +11,6 @@ Commands explained:
 `test:update-snapshots`: updates any snapshots files from @open-wc/semantic-dom-diff. Use this when your component's rendered HTML changed.
 `test:prune-snapshots`: prunes any used snapshots files from @open-wc/semantic-dom-diff.
 `test:compatibility`: like test:watch, except that it makes your tests compatible with older browsers (including IE11).
+
+
+"test": "karma start --single-run --browsers ChromeHeadless karma.conf.js"
