@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script src="vendor/jquery-2.1.3.js"></script>
-  <script src="dist/api-client.umd.production.min.js"></script>
-
   <title>RESTful api client</title>
+  <script src="vendor/jquery-2.1.3.js"></script>
 </head>
 <body>
-<script>
+<script type="module">
+  import { ApiClient } from './dist/api-client.development.js';
+
   var github = ApiClient('https://api.github.com', {
     hooks: {
       headers: {
