@@ -66,6 +66,4 @@ function generateBundleConfig(outputFile, format, mode) {
 export default [
   generateBundleConfig(path.join('dist', 'api-client.development.js'), Format.ESModule, Mode.DEVELOPMENT),
   generateBundleConfig(path.join('dist', 'api-client.production.min.js'), Format.ESModule, Mode.PRODUCTION),
-
-  generateBundleConfig(path.join('dist', 'api-client.testing.js'), Format.UMD, Mode.DEVELOPMENT),
 ];
