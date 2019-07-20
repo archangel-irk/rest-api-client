@@ -3,6 +3,8 @@ import filesize from 'rollup-plugin-filesize';
 import { terser } from 'rollup-plugin-terser';
 import pkg from './package.json';
 
+
+// Config examples
 // https://github.com/Polymer/lit-html/blob/master/rollup.config.js
 // https://github.com/mobxjs/mobx/blob/master/scripts/build.js
 // https://github.com/rollup/rollupjs.org/blob/master/rollup.config.js
@@ -10,7 +12,6 @@ import pkg from './package.json';
 // https://github.com/rollup/rollup/blob/master/rollup.config.js
 // https://github.com/rollup/rollup-starter-lib/blob/master/rollup.config.js
 
-// banner: '/** Rest-Api-Client - (c) Constantine Melnikov 2013 - 2019 - MIT Licensed */',
 const banner = `/**
  * Rest-Api-Client v${pkg.version}
  * https://github.com/archangel-irk/rest-api-client
@@ -31,7 +32,6 @@ const Mode = {
   PRODUCTION: 'production',
   DEVELOPMENT: 'development',
 };
-
 
 function generateBundleConfig(outputFile, format, mode) {
   let plugins;
