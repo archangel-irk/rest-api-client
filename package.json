@@ -11,7 +11,9 @@
   "module": "dist/api-client.production.min.js",
   "browser": "dist/api-client.production.min.js",
   "scripts": {
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "test": "karma start --coverage",
+    "test:watch": "karma start --auto-watch=true --single-run=false"
   },
   "devDependencies": {
     "@babel/core": "7.5.5",
