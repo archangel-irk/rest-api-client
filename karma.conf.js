@@ -3,7 +3,7 @@ module.exports = function (config) {
     // list of files / patterns to load in the browser
     files: [
       'vendor/jquery-2.1.3.js',
-      'dist/api-client.umd.production.min.js',
+      'dist/api-client.testing.js',
       'test/utils.test.js',
       'test/api-client.test.js',
     ],
