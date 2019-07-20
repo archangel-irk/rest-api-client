@@ -6,33 +6,9 @@
  */
 'use strict';
 
-const { series, src, dest } = require('gulp');
-const browserify = require('gulp-browserify');
-const rename = require('gulp-rename');
-const uglify = require('gulp-uglify');
+const { series } = require('gulp');
 const gulpDevelopServer = require('gulp-develop-server');
 const karmaServer = require('karma').Server;
-
-
-function build() {
-  return src('src/index.js')
-    .pipe(browserify({
-      standalone: 'ApiClient',
-    }))
-    .pipe(uglify())
-    .pipe(rename('api-client.min.js'))
-    .pipe(dest('dist'));
-}
-
-function buildDebug() {
-  return src('src/index.js')
-    .pipe(browserify({
-      standalone: 'ApiClient',
-      debug: true,
-    }))
-    .pipe(rename('api-client.js'))
-    .pipe(dest('dist'));
-}
 
 function server(cb) {
   return gulpDevelopServer.listen({
@@ -52,4 +28,3 @@ function test(cb) {
 }
 
 exports.test = series(server, test);
-exports.default = series(build, buildDebug);
