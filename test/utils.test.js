@@ -1,4 +1,4 @@
-const ApiClient = window.ApiClient.ApiClient;
+import { ApiClient } from '../dist/api-client.development.js';
 
 describe('utils', function() {
   describe('deepMerge', function() {

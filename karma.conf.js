@@ -3,16 +3,34 @@ module.exports = function (config) {
     // list of files / patterns to load in the browser
     files: [
       'vendor/jquery-2.1.3.js',
-      'dist/api-client.testing.js',
+      // 'dist/api-client.testing.js',
+      // { pattern: 'dist/api-client.development.js', type: 'module', included: false },
       { pattern: 'test/**/*.test.js', type: 'module' },
+    ],
+
+    plugins: [
+      // load plugin
+      require.resolve('@open-wc/karma-esm'),
+
+      // fallback: resolve any karma- plugins
+      'karma-*',
     ],
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
     frameworks: [
+      'esm',
       'mocha',
       'chai',
     ],
+
+    esm: {
+      // if you are using 'bare module imports' you will need this option
+      nodeResolve: true,
+      // set compatibility mode to all
+      compatibility: 'all',
+      coverage: true,
+    },
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
@@ -33,7 +51,7 @@ module.exports = function (config) {
       // source files, that you wanna generate coverage for
       // do not include tests or libraries
       // (these files will be instrumented by Istanbul)
-      'dist/api-client.testing.js': ['coverage'],
+      'dist/api-client.development.js': ['coverage'],
     },
 
     // optionally, configure the reporter

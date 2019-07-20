@@ -1,4 +1,4 @@
-const ApiClient = window.ApiClient.ApiClient;
+import { ApiClient } from '../dist/api-client.development.js';
 
 describe('ApiClient', function() {
   //this.timeout( 0 );
