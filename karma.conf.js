@@ -33,7 +33,7 @@ module.exports = function (config) {
       // source files, that you wanna generate coverage for
       // do not include tests or libraries
       // (these files will be instrumented by Istanbul)
-      'dist/api-client.umd.production.min.js': ['coverage'],
+      'dist/api-client.testing.js': ['coverage'],
     },
 
     // optionally, configure the reporter
