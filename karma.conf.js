@@ -1,6 +1,4 @@
 module.exports = function (config) {
-  'use strict';
-
   config.set({
     // list of files / patterns to load in the browser
     files: [
