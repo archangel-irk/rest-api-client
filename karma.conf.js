@@ -9,9 +9,9 @@ module.exports = function (config) {
     plugins: [
       // load plugin
       require.resolve('@open-wc/karma-esm'),
-
       // fallback: resolve any karma- plugins
       'karma-*',
+      require('./test/api-client-test-server.plugin.js'),
     ],
 
     // frameworks to use
@@ -20,6 +20,7 @@ module.exports = function (config) {
       'esm',
       'mocha',
       'chai',
+      'api-client-test-server',
     ],
 
     esm: {
