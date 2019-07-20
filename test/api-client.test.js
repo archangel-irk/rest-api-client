@@ -1,3 +1,5 @@
+const ApiClient = window.ApiClient.ApiClient;
+
 describe('ApiClient', function() {
   //this.timeout( 0 );
 
