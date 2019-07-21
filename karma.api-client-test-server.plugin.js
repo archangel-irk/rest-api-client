@@ -1,5 +1,7 @@
-var express = require('express');
-var bodyParser = require('body-parser');
+/* eslint-env node */
+
+const express = require('express');
+const bodyParser = require('body-parser');
 
 // from example
 // https://github.com/tasubo/karma-express-http-server
