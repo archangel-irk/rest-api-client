@@ -3,6 +3,8 @@
 // examples and tools
 // https://open-wc.org/testing/testing-karma.html
 
+const apiClientTestServer = require('./karma.api-client-test-server.plugin.js');
+
 module.exports = function (config) {
   config.set({
     // list of files / patterns to load in the browser
@@ -16,7 +18,7 @@ module.exports = function (config) {
       require.resolve('@open-wc/karma-esm'),
       // fallback: resolve any karma- plugins
       'karma-*',
-      require('./karma.api-client-test-server.plugin.js'),
+      apiClientTestServer,
     ],
 
     // frameworks to use
