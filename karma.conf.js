@@ -16,7 +16,7 @@ module.exports = function (config) {
       require.resolve('@open-wc/karma-esm'),
       // fallback: resolve any karma- plugins
       'karma-*',
-      require('./test/api-client-test-server.plugin.js'),
+      require('./karma.api-client-test-server.plugin.js'),
     ],
 
     // frameworks to use
