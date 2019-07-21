@@ -4,7 +4,6 @@ import filesize from 'rollup-plugin-filesize';
 import { terser } from 'rollup-plugin-terser';
 import pkg from './package.json';
 
-
 // Config examples
 // https://habr.com/en/post/440946/
 // https://github.com/Polymer/lit-html/blob/master/rollup.config.js

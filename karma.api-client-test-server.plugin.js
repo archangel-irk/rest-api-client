@@ -7,7 +7,6 @@ const bodyParser = require('body-parser');
 // https://github.com/tasubo/karma-express-http-server
 // https://github.com/weblogixx/karma-restify-server
 
-
 function createApiClientTestServer(args, config, logger, helper) {
   var log = logger.create('api-client-test-server');
   log.info('Creating');
