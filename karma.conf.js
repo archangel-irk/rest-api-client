@@ -1,3 +1,6 @@
+// examples and tools
+// https://open-wc.org/testing/testing-karma.html
+
 module.exports = function (config) {
   config.set({
     // list of files / patterns to load in the browser
