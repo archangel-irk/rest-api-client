@@ -1,4 +1,8 @@
-# RESTful api client (alpha)
+# RESTful api client [![Travis][build-badge]][build]
+
+[build-badge]: https://img.shields.io/travis/archangel-irk/rest-api-client/master.svg?style=flat-square
+[build]: https://travis-ci.org/archangel-irk/rest-api-client
+
 [english](README.eng.md) | [по-русски](README.md)
 
 Build easy client to the RESTful server api.  
