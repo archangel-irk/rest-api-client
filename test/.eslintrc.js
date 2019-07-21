@@ -5,4 +5,7 @@ module.exports = {
     jquery: true,
     mocha: true,
   },
+  globals: {
+    assert: 'readonly',
+  },
 };
