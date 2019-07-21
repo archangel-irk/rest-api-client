@@ -1,8 +1,6 @@
 import { ApiClient } from '../dist/api-client.development.js';
 
-describe('ApiClient', function() {
-  //this.timeout( 0 );
-
+describe('ApiClient', () => {
   it('create without `new`', function() {
     assert.ok(ApiClient() instanceof ApiClient);
   });

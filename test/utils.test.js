@@ -1,6 +1,6 @@
 import { ApiClient } from '../dist/api-client.development.js';
 
-describe('utils', function() {
+describe('utils', () => {
   describe('deepMerge', function() {
     it('add keys in target that do not exist at the root', function() {
       var src = { key1: 'value1', key2: 'value2' };
