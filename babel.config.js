@@ -1,3 +1,5 @@
+/* eslint-env node */
+
 // Babel used only for babel-eslint.
 const presets = [
   [

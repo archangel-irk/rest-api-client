@@ -1,3 +1,5 @@
+/* eslint-env node */
+
 // examples and tools
 // https://open-wc.org/testing/testing-karma.html
 

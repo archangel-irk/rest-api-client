@@ -1,3 +1,4 @@
+/* eslint-env node */
 import path from 'path';
 import filesize from 'rollup-plugin-filesize';
 import { terser } from 'rollup-plugin-terser';
