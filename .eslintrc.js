@@ -51,6 +51,16 @@ module.exports = {
     // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/prefer-default-export.md
     'import/prefer-default-export': OFF,
 
+    // Forbid the use of extraneous packages
+    // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/no-extraneous-dependencies.md
+    // paths are treated both as absolute paths, and relative to process.cwd()
+    'import/no-extraneous-dependencies': [ERROR, {
+      devDependencies: [
+        '**/karma.*.js', // karma config and custom plugins
+      ],
+    }],
+
+
     // JSDOC
     // do not require jsdoc
     // https://eslint.org/docs/rules/require-jsdoc
