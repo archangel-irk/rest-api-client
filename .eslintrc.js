@@ -82,6 +82,10 @@ module.exports = {
       optionalDependencies: false,
     }],
 
+    // Require a newline after the last import/require in a group
+    // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/newline-after-import.md
+    'import/newline-after-import': [ERROR, { 'count': 2 }],
+
     // JSDOC
     // do not require jsdoc
     // https://eslint.org/docs/rules/require-jsdoc
