@@ -28,19 +28,6 @@ export function getRequest( data, ajaxSettings, done ){
   ajaxSettings = ajaxSettings || {};
   ajaxSettings.data = data;
 
-  if ( resource.apiRoot.defaults.cache ){
-    ajaxSettings.url = utils.constructUrl( resource );
-
-    key = resource.apiRoot.cache.getKey( ajaxSettings );
-    var req = resource.apiRoot.cache.get( key );
-
-    if ( req ){
-      done && done( req.response, req.textStatus, req.jqXHR );
-      utils.clearIdentity( resource );
-      return $.Deferred().resolve( req.response, req.textStatus, req.jqXHR );
-    }
-  }
-
   var dfd = $.Deferred();
   this._resourceRequest( method, ajaxSettings ).done(function( response, textStatus, jqXHR ){
     var fields;
@@ -55,14 +42,6 @@ export function getRequest( data, ajaxSettings, done ){
     // Есть ответ надо сохранить в хранилище
     if ( resource.storage && !ajaxSettings.doNotStore ){
       response = storage[ resource.collectionName ].add( response, fields, true );
-    }
-
-    if ( resource.apiRoot.defaults.cache ){
-      resource.apiRoot.cache.put( key, {
-        response: response,
-        textStatus: textStatus,
-        jqXHR: jqXHR
-      });
     }
 
     done && done( response, textStatus, jqXHR );

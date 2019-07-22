@@ -63,7 +63,7 @@ import { utils } from './utils.js';
 import { getRequest } from './get.js';
 import { createPostLikeRequest } from './post.js';
 import { deleteRequest } from './delete.js';
-import { Cache } from './cache.js';
+
 
 var resourceMixin = {
   resourceName: 'resource',
@@ -222,8 +222,6 @@ function ApiClient( url, options ){
   this.defaults = {
     // Strip slashes by default
     stripTrailingSlashes: true,
-    // Use cache for GET requests
-    cache: true
   };
 
   // If first arg is object
@@ -258,11 +256,6 @@ function ApiClient( url, options ){
 
   //todo: to utils (deepMerge) добавить возможность расширять объект, а не возвращать новый
   $.extend( true, this, options );
-
-  // Init cache
-  if ( this.defaults.cache ){
-    this.cache = new Cache();
-  }
 }
 
 ApiClient.prototype = {
