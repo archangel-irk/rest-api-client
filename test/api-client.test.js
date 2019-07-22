@@ -94,25 +94,4 @@ describe('ApiClient', () => {
       });
     });
   });
-
-  describe('cache', function() {
-    it('works', function(done) {
-      var api = new ApiClient(API_URL);
-
-      api.add('users');
-
-      api.users.get().done(function(response) {
-        assert.deepEqual(response, [{ user: 'tobi' }, { user: 'loki' }]);
-
-        api.users.get().done(function(response) {
-          var resArr = [{ user: 'tobi' }, { user: 'loki' }];
-          resArr.__cached = true;
-
-          assert.deepEqual(response, resArr);
-
-          done();
-        });
-      });
-    });
-  });
 });
