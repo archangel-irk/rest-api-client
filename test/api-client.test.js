@@ -1,13 +1,15 @@
 import { ApiClient } from '../dist/api-client.development.js';
 
 
+const API_URL = 'http://0.0.0.0:3000';
+
 describe('ApiClient', () => {
   it('create without `new`', function() {
     assert.ok(ApiClient() instanceof ApiClient);
   });
 
   it('read root .done()', function(done) {
-    var api = new ApiClient('http://0.0.0.0:3000');
+    var api = new ApiClient(API_URL);
 
     api.read().done(function(data) {
       assert.equal(data.user, 'tobi');
@@ -17,7 +19,7 @@ describe('ApiClient', () => {
   });
 
   it('read root with callback', function(done) {
-    var api = new ApiClient('http://0.0.0.0:3000');
+    var api = new ApiClient(API_URL);
 
     api.read(function(data) {
       assert.equal(data.user, 'tobi');
@@ -28,7 +30,7 @@ describe('ApiClient', () => {
 
   describe('GET', function() {
     it('users with resource function call and .done()', function(done) {
-      var api = new ApiClient('http://0.0.0.0:3000');
+      var api = new ApiClient(API_URL);
 
       api.add('users');
 
@@ -40,7 +42,7 @@ describe('ApiClient', () => {
     });
 
     it('users without resource function call and .done()', function(done) {
-      var api = new ApiClient('http://0.0.0.0:3000');
+      var api = new ApiClient(API_URL);
 
       api.add('users');
 
@@ -52,7 +54,7 @@ describe('ApiClient', () => {
     });
 
     it('users with resource function call and callback', function(done) {
-      var api = new ApiClient('http://0.0.0.0:3000');
+      var api = new ApiClient(API_URL);
 
       api.add('users');
 
@@ -64,7 +66,7 @@ describe('ApiClient', () => {
     });
 
     it('users without resource function call and callback', function(done) {
-      var api = new ApiClient('http://0.0.0.0:3000');
+      var api = new ApiClient(API_URL);
 
       api.add('users');
 
@@ -78,7 +80,7 @@ describe('ApiClient', () => {
 
   describe('POST', function() {
     it('users', function(done) {
-      var api = new ApiClient('http://0.0.0.0:3000');
+      var api = new ApiClient(API_URL);
 
       api.add('users');
 
@@ -95,7 +97,7 @@ describe('ApiClient', () => {
 
   describe('cache', function() {
     it('works', function(done) {
-      var api = new ApiClient('http://0.0.0.0:3000');
+      var api = new ApiClient(API_URL);
 
       api.add('users');
 
