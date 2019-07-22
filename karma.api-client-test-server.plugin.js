@@ -12,7 +12,7 @@ function createApiClientTestServer(args, config, logger, helper) {
   log.info('Creating');
 
   var app = express();
-  app.set('port', 3000);
+  app.set('port', 3022);
 
   // ## CORS middleware
   function allowCrossDomain(req, res, next) {

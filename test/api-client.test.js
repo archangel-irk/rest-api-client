@@ -1,7 +1,7 @@
 import { ApiClient } from '../dist/api-client.development.js';
 
 
-const API_URL = 'http://0.0.0.0:3000';
+const API_URL = 'http://0.0.0.0:3022';
 
 describe('ApiClient', () => {
   it('create without `new`', function() {
