@@ -86,6 +86,10 @@ module.exports = {
     // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/newline-after-import.md
     'import/newline-after-import': [ERROR, { 'count': 2 }],
 
+    // Allow cyclical dependencies between modules
+    // https://github.com/benmosher/eslint-plugin-import/blob/d81f48a2506182738409805f5272eff4d77c9348/docs/rules/no-cycle.md
+    'import/no-cycle': OFF,
+
     // JSDOC
     // do not require jsdoc
     // https://eslint.org/docs/rules/require-jsdoc
